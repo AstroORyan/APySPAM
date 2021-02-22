@@ -78,21 +78,6 @@ class SED:
         Addition = temp_Masses[:,np.newaxis]*(addition_array)
         
         return Addition
-  
-    #Initialises population ages and distribution
-    def initPops(Age1, Age2, metal1, metal2, n, directory):
-        # Updated
-        particle_ages = np.zeros(n)   #NOTE: These are in PHYSICAL UNITS.
-        particle_ages[:int(n/2)] = Age1
-        particle_ages[int(n/2):] = Age2
-      
-        Spectral_Density_Array_1 = SED.Metal_Interpolation(metal1,directory)
-        Spectral_Density_Array_2 = SED.Metal_Interpolation(metal2,directory)
-      
-        Wavelength = Spectral_Density_Array_1[1:,0]    
-      
-        return Spectral_Density_Array_1, Spectral_Density_Array_2, Wavelength
-
 
     #This function will aim to do a MANUAL interpolation between the potential fluxes of two different ages.    
     def Age_Interpolation(age_index, Spectral_Density_Array,Age_Arrays,temp):
@@ -126,7 +111,7 @@ class SED:
             exit()
             
         if metal in Possible_Metallicity_files:
-            filename_Spectral_Density_Array = directory+r'\Colours\Raw_Spectral_Data_Delayed_Tau\Raw_Spectral_Data_Z_'+str(metal)+'.txt'
+            filename_Spectral_Density_Array = directory+'Spectral_Data_Z_'+str(metal)+'.txt'
             Spectral_Density_Array = np.loadtxt(filename_Spectral_Density_Array)
             return Spectral_Density_Array
             
@@ -136,8 +121,8 @@ class SED:
         Max_Metal = Possible_Metallicity_files[Max_Metal_Index]
         Min_Metal = Possible_Metallicity_files[Min_Metal_Index]
         
-        filename_Spectral_Density_Max = directory+r'\Colours\Raw_Spectral_Data_Delayed_Tau\Raw_Spectral_Data_Z_'+str(Max_Metal)+'.txt'
-        filename_Spectral_Density_Min = directory+r'\Colours\Raw_Spectral_Data_Delayed_Tau\Raw_Spectral_Data_Z_'+str(Min_Metal)+'.txt'
+        filename_Spectral_Density_Max = directory+r'Spectral_Data_Z_'+str(Max_Metal)+'.txt'
+        filename_Spectral_Density_Min = directory+r'Spectral_Data_Z_'+str(Min_Metal)+'.txt'
     
         Spectral_Density_Array_Max = np.loadtxt(filename_Spectral_Density_Max,comments='#')
         Spectral_Density_Array_Min = np.loadtxt(filename_Spectral_Density_Min,comments='#')

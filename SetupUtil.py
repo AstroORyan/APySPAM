@@ -4,7 +4,6 @@ import numpy as np
 import scipy.special as sc
 
 from MathUtil import MathUtil
-from Parameters import Parameters
 from SPMModel import SPMModel
 from NBIModel import NBIModel
 from MONDModel import MONDModel

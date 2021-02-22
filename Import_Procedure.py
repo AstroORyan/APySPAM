@@ -13,6 +13,7 @@ Doing it this way allows us to only load once, and to check that the correct fol
 import os
 import numpy as np
 import glob
+from SEDs import SED
 
 class Imports():
     def Filters():
@@ -28,10 +29,15 @@ class Imports():
             
         return filter_data
     
-    def SSPs(metals):
-        # This ones a little bit more complicated than the previous import. Here, we will require the user inputted metallicities as well
-        # as the way to call the function which interpolates them. This shouldn't be too complicated, but I'm doing this just before JC
-        # so will leave this as an exercise for later.
-        pass
+    def SSPs(metallicity):
+        dir_path = os.getcwd()
+        metals_folder = dir_path+'\\Spectral_Data\\'
+        
+        Spectral_Density_Array_1 = SED.Metal_Interpolation(metallicity[0],metals_folder)
+        Spectral_Density_Array_2 = SED.Metal_Interpolation(metallicity[1],metals_folder)
+        
+        Wavelength = Spectral_Density_Array_1[1:,0]
+        
+        return Spectral_Density_Array_1, Spectral_Density_Array_2, Wavelength
     
         

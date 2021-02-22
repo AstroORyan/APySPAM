@@ -18,7 +18,7 @@ from Gas_Dist import Gas_Dist
 from SEDs import SED
 from Colour import Colours
 from Plotting import Plotting
-from Diagnostics import Diagnostics
+from Import_Procedure import Imports
  
 
 class Run:
@@ -206,8 +206,8 @@ def main():
   global directory, directory_results
   global SFR_Algorithm
   SFR_Algorithm = 0         # Note, a value of 0 corresponds to a delayed tau SF method and 1 is a KS one.
-  directory = 'C:\\Users\\oryan\\Documents\\PySPAM_Rewritten\\'
-  directory_results = 'C:\\Users\\oryan\\Documents\\PySPAM_Rewritten\\Results\\'
+  directory = os.getcwd()
+  directory_results = directory+'\\Results\\'
   Input_Counter = 0
   
   Inputs = pd.read_csv(r'C:\Users\oryan\Documents\PySPAM_Rewritten\All_Gal_Inputs.csv')
@@ -243,8 +243,7 @@ def main():
               for q in range(len(folders_make)):
                   os.mkdir(Results_dir+'\\Colour_Images'+Galaxy_Folders[p]+folders_make[q])
       
-      Spectral_Density_Array_1, Spectral_Density_Array_2, Wavelength = SED.initPops(params.Galactic_Age_1,params.Galactic_Age_2,params.metal_1,
-                                                                                    params.metal_2,params.n1+params.n2,directory)
+      Spectral_Density_Array_1, Spectral_Density_Array_2, Wavelength = Imports.SSPs([params.metal_1,params.metal_2])
                   
       nstep_local = 7500;
     
