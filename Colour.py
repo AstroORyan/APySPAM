@@ -8,37 +8,26 @@ Created on Mon Nov  2 14:25:20 2020
 import numpy as np
 
 class Colours:
-    def Colour_Calculation(Spectral_Density, Wavelength, redshift, n, d_cm, directory):
+    def Colour_Calculation(filter_data,Spectral_Density, Wavelength, redshift, n, d_cm, directory):
       ##Setting up the Filter Data
-#      LSST_u_filename = directory+r'\Colours\LSST_Filter_Sets_AB\LSST_LSST.u.dat'
-#      LSST_g_filename = directory+r'\Colours\LSST_Filter_Sets_AB\LSST_LSST.g.dat'
-#      LSST_r_filename = directory+r'\Colours\LSST_Filter_Sets_AB\LSST_LSST.r.dat'
-#      LSST_i_filename = directory+r'\Colours\LSST_Filter_Sets_AB\LSST_LSST.i.dat'
-#      LSST_z_filename = directory+r'\Colours\LSST_Filter_Sets_AB\LSST_LSST.z.dat'
+
+      u_filter_Array = filter_data[0]
+      g_filter_Array = filter_data[1]
+      r_filter_Array = filter_data[2]
+      i_filter_Array = filter_data[3]
+      z_filter_Array = filter_data[4]
       
-      SDSS_u_filename = directory+r'\Colours\SDSS_Filter_Sets_AB\SLOAN_SDSS.u.dat'
-      SDSS_g_filename = directory+r'\Colours\SDSS_Filter_Sets_AB\SLOAN_SDSS.g.dat'
-      SDSS_r_filename = directory+r'\Colours\SDSS_Filter_Sets_AB\SLOAN_SDSS.r.dat'
-      SDSS_i_filename = directory+r'\Colours\SDSS_Filter_Sets_AB\SLOAN_SDSS.i.dat'
-      SDSS_z_filename = directory+r'\Colours\SDSS_Filter_Sets_AB\SLOAN_SDSS.z.dat'
-#      
-      LSST_u_filter_Array = np.loadtxt(SDSS_u_filename)
-      LSST_g_filter_Array = np.loadtxt(SDSS_g_filename)
-      LSST_r_filter_Array = np.loadtxt(SDSS_r_filename)
-      LSST_i_filter_Array = np.loadtxt(SDSS_i_filename)
-      LSST_z_filter_Array = np.loadtxt(SDSS_z_filename)
+      Wavelength_u = u_filter_Array[:,0]
+      Wavelength_g = g_filter_Array[:,0]
+      Wavelength_r = r_filter_Array[:,0]
+      Wavelength_i = i_filter_Array[:,0]
+      Wavelength_z = z_filter_Array[:,0]
       
-      Wavelength_u = LSST_u_filter_Array[:,0]
-      Wavelength_g = LSST_g_filter_Array[:,0]
-      Wavelength_r = LSST_r_filter_Array[:,0]
-      Wavelength_i = LSST_i_filter_Array[:,0]
-      Wavelength_z = LSST_z_filter_Array[:,0]
-      
-      u_Transmission = LSST_u_filter_Array[:,1]
-      g_Transmission = LSST_g_filter_Array[:,1]
-      r_Transmission = LSST_r_filter_Array[:,1]
-      i_Transmission = LSST_i_filter_Array[:,1]
-      z_Transmission = LSST_z_filter_Array[:,1]
+      u_Transmission = u_filter_Array[:,1]
+      g_Transmission = g_filter_Array[:,1]
+      r_Transmission = r_filter_Array[:,1]
+      i_Transmission = i_filter_Array[:,1]
+      z_Transmission = z_filter_Array[:,1]
       
       Wavelength_u_lr = np.zeros(int(np.ceil(len(Wavelength_u)+100)))
       Wavelength_g_lr = np.zeros(int(np.ceil(len(Wavelength_g)+100)))

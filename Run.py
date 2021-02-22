@@ -214,6 +214,7 @@ def main():
   Input_Data = Inputs.values
   
   d1 = datetime.datetime.now()
+  filter_data = Imports.Filters()
   for p in range(Input_Data.shape[0]):
 #      if Input_Counter == 1:
 #          sys.exit()
@@ -266,7 +267,7 @@ def main():
             Spectral_Density = SED.Final_Mags_Index(run.Initial_Spectral_Density, params.New_Pops_Counter,params.New_Populations_Age,params.n1,
                                               run.Population_Mass,Spectral_Density_Array_1,Spectral_Density_Array_2)
             
-            Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm, directory)
+            Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(filter_data,Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm, directory)
             
             Plotting.Plotting_Function(Population_Colours_Array, Population_Flux_Array,run.Weights,i,run.x0,params.display_scale,params.Galaxy_Name,
                                         params.n1, params.n2,run.Tracer_Mass,params.SFR, params.time,params.Time_per_Unit,
