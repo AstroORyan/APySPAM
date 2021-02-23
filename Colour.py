@@ -8,7 +8,7 @@ Created on Mon Nov  2 14:25:20 2020
 import numpy as np
 
 class Colours:
-    def Colour_Calculation(filter_data,Spectral_Density, Wavelength, redshift, n, d_cm, directory):
+    def Colour_Calculation(filter_data,Spectral_Density, Wavelength, redshift, n, d_cm):
       ##Setting up the Filter Data
 
       u_filter_Array = filter_data[0]

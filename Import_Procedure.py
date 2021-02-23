@@ -40,4 +40,7 @@ class Imports():
         
         return Spectral_Density_Array_1, Spectral_Density_Array_2, Wavelength
     
+    def Export(Vectors,Fluxes,Formed_Stellar_Masses,SFRs,directory_result):
+        pass
+    
         

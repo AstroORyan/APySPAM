@@ -159,22 +159,6 @@ class Run:
     # self.params.SFH[i-1,1] = np.sum(self.params.SFR[self.params.n1:])
     
     self.params.New_Populations_Age[:,:i-1] += self.params.time_in_step
-    
-    # if ((i - 1) % 50 == 5):
-    #     self.Initial_Spectral_Density = SED.Aging_initSED(self.params.n1, self.params.n1+self.params.n2, self.params.Galactic_Age_1, self.params.Galactic_Age_2, 
-    #                                                      self.params.Avg_Population_Mass_1, self.params.Avg_Population_Mass_1,Spectral_Density_Array_1,Spectral_Density_Array_2)
-            
-    #     Spectral_Density = SED.Final_Mags_Index(self.Initial_Spectral_Density, self.params.New_Pops_Counter,self.params.New_Populations_Age,self.params.n1,
-    #                                             self.Population_Mass,Spectral_Density_Array_1,Spectral_Density_Array_2)
-            
-    #     Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(Spectral_Density, Wavelength,self.params.redshift, self.params.n, self.params.d_cm, directory)
-            
-    #     Plotting.Plotting_Function(Population_Colours_Array, Population_Flux_Array,i,self.x0,self.params.display_scale,self.params.Galaxy_Name,
-    #                                self.params.n1, self.params.n2,self.Tracer_Mass,self.params.SFR, self.params.time,self.params.Time_per_Unit,
-    #                                self.params.Distance_per_Unit, self.params.rout1, self.params.rout2, self.params.Perturber_Position,directory_results,Counts)
-    #     dims = self.Initial_Spectral_Density.shape
-    #     self.Initial_Spectral_Density = np.zeros(dims)                        
-    #     del Spectral_Density
       
   def getFilename(self,i):
 
@@ -213,36 +197,14 @@ def main():
   Inputs = pd.read_csv(r'C:\Users\oryan\Documents\PySPAM_Rewritten\All_Gal_Inputs.csv')
   Input_Data = Inputs.values
   
-  d1 = datetime.datetime.now()
   filter_data = Imports.Filters()
-  for p in range(Input_Data.shape[0]):
-#      if Input_Counter == 1:
-#          sys.exit()
-      
+  
+  for p in range(Input_Data.shape[0]):      
       args = sys.argv[1:]
       run = Run()
       run.initRun(args,Input_Counter)
       params = run.params;
       model = 3                 # Note, this line here decides the gas model. 0 = Exponential, 1 = Plummer, 2 = Hernquist and 3 = MN
-      
-      if os.path.isdir(directory_results+params.Galaxy_Name):
-          Input_Counter += 1
-          del run, params
-          continue
-      else:
-          Results_dir = directory_results+params.Galaxy_Name
-          os.mkdir(Results_dir)
-          folders_make = ['\\Gas_Density', '\\Gas_Density_Primary','\\Gas_Density_Secondary','\\Lupton_Images',
-                          '\\SFR_Density','\\SFR_Primary','\\SFR_Secondary','\\Colour_Images','\\Diagnostics']
-          for q in range(len(folders_make)):
-              os.mkdir(Results_dir+folders_make[q])
-          folders_make = ['\\u_filter','\\g_filter','\\r_filter','\\i_filter','\\z_filter']
-          Galaxy_Folders = ['\\Overall', '\\Primary', '\\Secondary']
-          for p in range(3):
-              os.mkdir(Results_dir+'\\Colour_Images'+Galaxy_Folders[p])
-          for p in range(3):
-              for q in range(len(folders_make)):
-                  os.mkdir(Results_dir+'\\Colour_Images'+Galaxy_Folders[p]+folders_make[q])
       
       Spectral_Density_Array_1, Spectral_Density_Array_2, Wavelength = Imports.SSPs([params.metal_1,params.metal_2])
                   
@@ -260,21 +222,6 @@ def main():
       
       for i in range(1,int(nstep_local+1)):
         run.takeAStep(i,run,Spectral_Density_Array_1, Spectral_Density_Array_2,Wavelength)
-        if i == 1:
-            run.Initial_Spectral_Density = SED.Aging_initSED(params.n1, params.n1+params.n2, params.Galactic_Age_1, params.Galactic_Age_2, 
-                                                        params.Avg_Population_Mass_1, params.Avg_Population_Mass_1,Spectral_Density_Array_1,Spectral_Density_Array_2)
-            
-            Spectral_Density = SED.Final_Mags_Index(run.Initial_Spectral_Density, params.New_Pops_Counter,params.New_Populations_Age,params.n1,
-                                              run.Population_Mass,Spectral_Density_Array_1,Spectral_Density_Array_2)
-            
-            Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(filter_data,Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm, directory)
-            
-            Plotting.Plotting_Function(Population_Colours_Array, Population_Flux_Array,run.Weights,i,run.x0,params.display_scale,params.Galaxy_Name,
-                                        params.n1, params.n2,run.Tracer_Mass,params.SFR, params.time,params.Time_per_Unit,
-                                        params.Distance_per_Unit, params.rout1, params.rout2, params.Perturber_Position,directory_results,Counts)
-            dims = run.Initial_Spectral_Density.shape
-            run.Initial_Spectral_Density = np.zeros(dims)                        
-            del Spectral_Density
         if(i % 10 == 5):
           run.params.iout = run.params.iout+1
           print(run.params.iout)
@@ -290,23 +237,16 @@ def main():
       
       # run.Diagnostics(Spectral_Density,Wavelength)
       
-      Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm, directory)
+      Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(filter_data, Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm)
       
       i = int(nstep_local)
-      Plotting.Plotting_Function(Population_Colours_Array, Population_Flux_Array,run.Weights,i,run.x0,params.display_scale,params.Galaxy_Name,
-                                  params.n1, params.n2,run.Tracer_Mass,params.SFR, params.time,params.Time_per_Unit,
-                                  params.Distance_per_Unit, params.rout1, params.rout2, params.Perturber_Position,directory_results,Counts)      
-      Input_Counter += 1
       
-      # Note, the following lines are to save SFR stuff.
-      # Diagnostics.SFR_Record(run.Population_Mass,params.SFH,params.e_times,[params.Galactic_Age_1, params.Galactic_Age_2],params.Time_per_Unit,params.h,params.tmin,params.n1,params.mass1,params.mass2,t0,directory_results,params.Galaxy_Name)
+      Imports.Export(run.x0,Population_Flux_Array,run.Population_Mass,params.SFR,directory_results)
+      
+      
+      Input_Counter += 1
 
       del Spectral_Density_Array_1, Spectral_Density_Array_2,Wavelength,run,Spectral_Density,Population_Colours_Array,Population_Flux_Array
-      d2 = datetime.datetime.now()
-      print(d1)
-      print(d2)
-      
-      sys.exit()
 
   
 if __name__ == "__main__": main()
