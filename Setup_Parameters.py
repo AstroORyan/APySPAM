@@ -16,7 +16,7 @@ class Setup_Parameters:
   def Setup_Parameters(self):      
       self.params.n = 2000  # Total number of particles in the simulation.
       
-      self.params.phi1 = 301            # Both phi and theta are the initial orienation angles of the galaxies.
+      self.params.phi1 = 301            # Both phi and theta are the initial orienation angles of the galaxies. Theta is about the y axis and phi is about the z axis.
       self.params.theta1 = 310.8075
       self.params.rscale1 = [0.0,0.0,1.0]       # A scaling relation used in the initial distribution of particles.
       self.params.rout1 = 2.97913       # rout1 and rout2 are the initial radii of the primary and secondary galaxy respectively. Note, this is in Galaxy Units of 15kpc.
@@ -61,17 +61,17 @@ class Setup_Parameters:
       v_z = 4.69234
       
       self.params.sec_vec = [r_x, r_y, r_z, v_x, v_y, v_z]
-      self.params.use_sec_vec = True    # 
-
-      self.params.h = 0.01
-      # self.params.tstart = Galaxy_Inputs[34]
+      self.params.use_sec_vec = True    # Leave as True. This means APySPAM will use the specified velocity vector rather than trying to calculate it from
+                                        # Keplarian parameters.
+      self.params.h = 0.01              # Time step. 1 time step = approx. 256Myrs.
+      # self.params.tstart = -5         # These lines allow for a user specified timeframe. tstart must be negative and tend must be positive or 0.
       # self.params.tend = 0#
       # self.params.time = self.params.tstart - self.params.tend
-      self.params.tIsSet = False  #NOTE: Original Value = True
+      self.params.tIsSet = False  #TRUE = User has set time, and code will use that. FALSE = algorithm will calculate time for interaction on the fly.
       
-      self.params.redshift = 0.0225   #This varible will change the redshift of our galaxies. This will have to be looked up for object.
+      self.params.redshift = 0.0225   #Galaxy redshift.
       
-      self.params.Galaxy_Name = 'Arp_240'          #This specifies folder name for the program. Have a folder: '\dir...\Colour_Evolution_Movie'+galaxyname+'\...
+      self.params.Galaxy_Name = 'Arp_240'   # Name that results will be saved under. 
       
       self.params.display_scale = 50  # In Galaxy units (x15kpc). This will change the scale of the overall interaction plot at the end.
                                         # WARNING!!! Making this too small may crash the code. Start big, and work down to better scales.
