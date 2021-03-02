@@ -47,7 +47,7 @@ class SetupUtil:
 
 
   #Determine if the caller provides a parameter file or a parameter string
-  def customCollision(self,args,Input_Counter):
+  def customCollision(self,args):
 
     self.params.tIsSet = False
 

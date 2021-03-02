@@ -1,9 +1,5 @@
 import numpy as np
 import sys
-import os
-import datetime
-import matplotlib.pyplot as plt
-import pandas as pd
 
 from Parameters import Parameters
 from SetupUtil import SetupUtil
@@ -11,7 +7,6 @@ from SPMModel import SPMModel
 from MONDModel import MONDModel
 from NBIModel import NBIModel
 from Integrator import Integrator
-from IOUtil import IOUtil
 from SFR_DT import Delayed_Tau
 from SFR_KS import KS_Model
 from Gas_Dist import Gas_Dist
@@ -33,11 +28,11 @@ class Run:
     x0 = None
     xout = None
 
-  def initRun(self,args,Input_Counter):
+  def initRun(self,args):
     su = SetupUtil()
 
     su.setHelpers(self.forceModel, self.integrator, self.params)
-    su.customCollision(args,Input_Counter)
+    su.customCollision(args)
     
     # update the forceModel based upon passed in args
     self.forceModel = su.createForceModel(self.params.potential_type,True)
@@ -190,14 +185,13 @@ def main():
   global directory, directory_results
   global SFR_Algorithm
   SFR_Algorithm = 0         # Note, a value of 0 corresponds to a delayed tau SF method and 1 is a KS one.
-  Input_Counter = 0
   
   directory_results = Imports.Results()
   filter_data = Imports.Filters()
   
   args = sys.argv[1:]
   run = Run()
-  run.initRun(args,Input_Counter)
+  run.initRun(args)
   params = run.params;
   model = 3                 # Note, this line here decides the gas model. 0 = Exponential, 1 = Plummer, 2 = Hernquist and 3 = MN
       
@@ -221,27 +215,17 @@ def main():
       run.params.iout = run.params.iout+1
       print(run.params.iout)
 
-      #IOUtil.outputParticles(run.getFilename(run.params.iout), run.integrator.x)
-  #sys.exit()
   run.Initial_Spectral_Density = SED.Aging_initSED(params.n1, params.n1+params.n2, params.Galactic_Age_1, params.Galactic_Age_2, 
                                                    params.Avg_Population_Mass_1, params.Avg_Population_Mass_1,Spectral_Density_Array_1,Spectral_Density_Array_2)
   
   Spectral_Density = SED.Final_Mags_Index(run.Initial_Spectral_Density, params.New_Pops_Counter,params.New_Populations_Age,params.n1,
                                           run.Population_Mass,Spectral_Density_Array_1,Spectral_Density_Array_2)
 #  print('Star Formation evaluation completed.')
-  
-  # run.Diagnostics(Spectral_Density,Wavelength)
-  
+    
   Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(filter_data, Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm)
   
   i = int(nstep_local)
   
-  Imports.Export(run.x0,Population_Flux_Array,run.Population_Mass,params.SFR,directory_results)
-  
-  
-  Input_Counter += 1
-
-  del Spectral_Density_Array_1, Spectral_Density_Array_2,Wavelength,run,Spectral_Density,Population_Colours_Array,Population_Flux_Array
-
+  Imports.Export(run.x0,Population_Flux_Array,run.Population_Mass,params.SFR,directory_results,params.Galaxy_Name)
   
 if __name__ == "__main__": main()
