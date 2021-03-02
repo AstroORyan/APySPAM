@@ -77,7 +77,7 @@ class SetupUtil:
     else:
 #      print('Parameters are coming from Setup_Parameters.py')
       
-      Setup_Parameters.Setup_Parameters(self,Input_Counter)
+      Setup_Parameters.Setup_Parameters(self)
 #      Setup_Parameters.Setup_Parameters(self,Probability_Parameters)
       
       #This section calculates the distance from the provided redshift (in cm)

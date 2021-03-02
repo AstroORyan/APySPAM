@@ -190,63 +190,58 @@ def main():
   global directory, directory_results
   global SFR_Algorithm
   SFR_Algorithm = 0         # Note, a value of 0 corresponds to a delayed tau SF method and 1 is a KS one.
-  directory = os.getcwd()
-  directory_results = directory+'\\Results\\'
   Input_Counter = 0
   
-  Inputs = pd.read_csv(r'C:\Users\oryan\Documents\PySPAM_Rewritten\All_Gal_Inputs.csv')
-  Input_Data = Inputs.values
-  
+  directory_results = Imports.Results()
   filter_data = Imports.Filters()
   
-  for p in range(Input_Data.shape[0]):      
-      args = sys.argv[1:]
-      run = Run()
-      run.initRun(args,Input_Counter)
-      params = run.params;
-      model = 3                 # Note, this line here decides the gas model. 0 = Exponential, 1 = Plummer, 2 = Hernquist and 3 = MN
+  args = sys.argv[1:]
+  run = Run()
+  run.initRun(args,Input_Counter)
+  params = run.params;
+  model = 3                 # Note, this line here decides the gas model. 0 = Exponential, 1 = Plummer, 2 = Hernquist and 3 = MN
       
-      Spectral_Density_Array_1, Spectral_Density_Array_2, Wavelength = Imports.SSPs([params.metal_1,params.metal_2])
+  Spectral_Density_Array_1, Spectral_Density_Array_2, Wavelength = Imports.SSPs([params.metal_1,params.metal_2])
                   
-      nstep_local = 7500;
+  nstep_local = 7500;
     
-      t0 = params.tstart;
-      params.nstep = ((params.tend-t0)/params.h)+1;
-      nstep_local = params.nstep;
-      time_interval = (params.tend-t0)*2;
+  t0 = params.tstart;
+  params.nstep = ((params.tend-t0)/params.h)+1;
+  nstep_local = params.nstep;
+  time_interval = (params.tend-t0)*2;
       
-      #IOUtil.writeParameterFile(params,"tmp.p")
-      run.Tracer_Mass, run.Weights = Gas_Dist.Gas_Decision(model,params,run.x0)     # Calculates gas masses and weights and stores them in the self object.
-      run.Population_Mass, run.Initial_Spectral_Density, params.Avg_Population_Mass_1, params.Avg_Population_Mass_2 = SED.initSED(params.tstart,params.tend,params.h,params.n1,params.n2,run.Weights,params.mass1,
+  #IOUtil.writeParameterFile(params,"tmp.p")
+  run.Tracer_Mass, run.Weights = Gas_Dist.Gas_Decision(model,params,run.x0)     # Calculates gas masses and weights and stores them in the self object.
+  run.Population_Mass, run.Initial_Spectral_Density, params.Avg_Population_Mass_1, params.Avg_Population_Mass_2 = SED.initSED(params.tstart,params.tend,params.h,params.n1,params.n2,run.Weights,params.mass1,
                                                                                                                                   params.mass2,params.Gas_Fraction_1,params.Gas_Fraction_2,params.Mass_per_Unit,len(Wavelength))
       
-      for i in range(1,int(nstep_local+1)):
-        run.takeAStep(i,run,Spectral_Density_Array_1, Spectral_Density_Array_2,Wavelength)
-        if(i % 10 == 5):
-          run.params.iout = run.params.iout+1
-          print(run.params.iout)
-    
-          #IOUtil.outputParticles(run.getFilename(run.params.iout), run.integrator.x)
-      #sys.exit()
-      run.Initial_Spectral_Density = SED.Aging_initSED(params.n1, params.n1+params.n2, params.Galactic_Age_1, params.Galactic_Age_2, 
-                                                       params.Avg_Population_Mass_1, params.Avg_Population_Mass_1,Spectral_Density_Array_1,Spectral_Density_Array_2)
-      
-      Spectral_Density = SED.Final_Mags_Index(run.Initial_Spectral_Density, params.New_Pops_Counter,params.New_Populations_Age,params.n1,
-                                              run.Population_Mass,Spectral_Density_Array_1,Spectral_Density_Array_2)
-    #  print('Star Formation evaluation completed.')
-      
-      # run.Diagnostics(Spectral_Density,Wavelength)
-      
-      Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(filter_data, Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm)
-      
-      i = int(nstep_local)
-      
-      Imports.Export(run.x0,Population_Flux_Array,run.Population_Mass,params.SFR,directory_results)
-      
-      
-      Input_Counter += 1
+  for i in range(1,int(nstep_local+1)):
+    run.takeAStep(i,run,Spectral_Density_Array_1, Spectral_Density_Array_2,Wavelength)
+    if(i % 10 == 5):
+      run.params.iout = run.params.iout+1
+      print(run.params.iout)
 
-      del Spectral_Density_Array_1, Spectral_Density_Array_2,Wavelength,run,Spectral_Density,Population_Colours_Array,Population_Flux_Array
+      #IOUtil.outputParticles(run.getFilename(run.params.iout), run.integrator.x)
+  #sys.exit()
+  run.Initial_Spectral_Density = SED.Aging_initSED(params.n1, params.n1+params.n2, params.Galactic_Age_1, params.Galactic_Age_2, 
+                                                   params.Avg_Population_Mass_1, params.Avg_Population_Mass_1,Spectral_Density_Array_1,Spectral_Density_Array_2)
+  
+  Spectral_Density = SED.Final_Mags_Index(run.Initial_Spectral_Density, params.New_Pops_Counter,params.New_Populations_Age,params.n1,
+                                          run.Population_Mass,Spectral_Density_Array_1,Spectral_Density_Array_2)
+#  print('Star Formation evaluation completed.')
+  
+  # run.Diagnostics(Spectral_Density,Wavelength)
+  
+  Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(filter_data, Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm)
+  
+  i = int(nstep_local)
+  
+  Imports.Export(run.x0,Population_Flux_Array,run.Population_Mass,params.SFR,directory_results)
+  
+  
+  Input_Counter += 1
+
+  del Spectral_Density_Array_1, Spectral_Density_Array_2,Wavelength,run,Spectral_Density,Population_Colours_Array,Population_Flux_Array
 
   
 if __name__ == "__main__": main()
