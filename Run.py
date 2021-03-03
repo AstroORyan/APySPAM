@@ -222,7 +222,7 @@ def main():
                                           run.Population_Mass,Spectral_Density_Array_1,Spectral_Density_Array_2)
 #  print('Star Formation evaluation completed.')
     
-  Population_Colours_Array,Population_Flux_Array,Counts = Colours.Colour_Calculation(filter_data, Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm)
+  Population_Flux_Array = Colours.Colour_Calculation(filter_data, Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm)
   
   i = int(nstep_local)
   
