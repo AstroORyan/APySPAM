@@ -37,11 +37,6 @@ class Delayed_Tau:
         SFR_2_Base = ((1/(e_2**2))*Age_2*np.exp(-(Age_2)/e_2))*((Baryonic_Fraction*Gal_m2*1e11)/1e9)
         SFR_Bases = [SFR_1_Base, SFR_2_Base]
         
-        # print(SFR_Bases)
-        # print(' ')
-        
-        # print(SFR_Bases)
-        
         SFR_Enhanced = np.asarray([SFR_1_Total - SFR_1_Base,SFR_2_Total - SFR_2_Base])
         
         SFR_Enhanced[SFR_Enhanced <= 0] = 0
@@ -52,8 +47,9 @@ class Delayed_Tau:
         M1 += (SFR_1_Base*timestep*TU*yr_conv)
         M2 += (SFR_2_Base*timestep*TU*yr_conv)
                 
-        return SFRs,Particle_Mass_Formed,M1,M2
-    
+        return SFRs,Particle_Mass_Formed,M1,M2      # Note that in this algorithm, we are finding the TOTAL STAR FORMATION RATE of at the position
+                                                    # of the particle, but only finding the extra mass formed from enhancement. The underlying SSP
+                                                    # deals with the un-enhanced SFR in the population.
     def Mass_Formed(SFR,SFR_Bases,timestep,TU,Weights,n1):
         SFR_1, SFR_2 = SFR
         SFR_1_Base, SFR_2_Base = SFR_Bases

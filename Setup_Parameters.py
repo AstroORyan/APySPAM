@@ -14,7 +14,7 @@ import numpy as np
 
 class Setup_Parameters:
   def Setup_Parameters(self):      
-      self.params.n = 2000  # Total number of particles in the simulation.
+      self.params.n = 1000  # Total number of particles in the simulation.
       
       self.params.phi1 = 301            # Both phi and theta are the initial orienation angles of the galaxies. Theta is about the y axis and phi is about the z axis.
       self.params.theta1 = 310.8075

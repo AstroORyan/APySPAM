@@ -135,8 +135,8 @@ class Run:
     
     if SFR_Algorithm == 0:
         self.params.SFR,self.Population_Mass[:,i-1],M1,M2 = Delayed_Tau.SFR_DT(self.params.Gas_Mass_Fractions,self.params.mass1,self.params.mass2,self.params.rout1,self.params.rout2,
-                                                               self.params.Perturber_Position ,self.params.Distance_per_Unit,self.params.Time_per_Unit,
-                                                               self.params.Galactic_Ages,self.params.e_times,self.params.h,i-1,self.Weights,self.params.n1)
+                                                                               self.params.Perturber_Position ,self.params.Distance_per_Unit,self.params.Time_per_Unit,
+                                                                               self.params.Galactic_Ages,self.params.e_times,self.params.h,i-1,self.Weights,self.params.n1)
     elif SFR_Algorithm == 1:
         self.params.SFR,self.Population_Mass[:,i-1],M1,M2,MT = KS_Model.SFR_KS(self.params.n1,self.params.n2,self.x0,self.params.rout1,self.params.rout2,self.params.Distance_per_Unit,
                                                                                self.Tracer_Mass,self.params.Perturber_Position,self.params.Time_per_Unit,self.params.h)
