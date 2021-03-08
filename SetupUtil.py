@@ -111,11 +111,6 @@ class SetupUtil:
     self.params.eps1 = self.params.epsilon1*self.params.epsilon1
     self.params.eps2 = self.params.epsilon2*self.params.epsilon2
     
-    temp_1 = int(((self.params.tend-self.params.tstart)/self.params.h)+1)
-    self.params.New_Populations_Age = np.zeros([self.params.n, temp_1])
-    self.params.SFH = np.zeros([temp_1,2])
-
-    
     self.params.Time_per_Unit = 0.0826    #This is in Gyrs        All of these numbers are from DOI: 10.1086/115613
     self.params.Time_per_Unit_s = self.params.Time_per_Unit*(1e9*365*24*60*60)
     self.params.Distance_per_Unit = 15  #This is in kpc
@@ -152,14 +147,6 @@ class SetupUtil:
     e2 = 1.5#((self.params.Gas_Mass_Fractions[1]*1.989e30)/(np.pi*(self.params.rout2*self.params.Distance_per_Unit*3.086e19)**2*(0.1*3.086e19)))**(-1/2)/1e9
     
     self.params.e_times = [e1,e2]
-    
-#    if self.params.SF_Onset_1 > 5:
-#        self.params.SF_Onset_1 = 5
-#    
-#    if self.params.SF_Onset_2 > 5:
-#        self.params.SF_Onset_2 = 5
-    self.params.Population_Mass = np.zeros([self.params.n,temp_1])
-    
 
   # end customCollision
 

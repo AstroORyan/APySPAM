@@ -54,11 +54,6 @@ class KS_Model:
             if SFR < 0:
                 SFR = 0
             Total_Mass_Formed = SFR*t
-            
-            if p <= n1:
-                SFR_test += KS_SFR
-                if p == n1:
-                    print(SFR_test)
                         
             Formed_Mass[p] = Total_Mass_Formed
             Mass_Used[p] = Total_Mass_Formed

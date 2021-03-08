@@ -55,9 +55,7 @@ class Delayed_Tau:
         SFR_Bases = [SFR_1_Base, SFR_2_Base]
         
         SFR_Enhanced = np.asarray([SFR_1_Total - SFR_1_Base,SFR_2_Total - SFR_2_Base])
-        
-        print(SFR_1_Total)
-        
+                
         SFR_Enhanced[SFR_Enhanced <= 0] = 0
         
         SFRs,Particle_Mass_Formed,M1,M2 = Delayed_Tau.Mass_Formed(SFR_Enhanced,SFR_Bases,timestep,TU,Weights,n1)
