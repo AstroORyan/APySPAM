@@ -8,6 +8,11 @@ object is defined in the Run.py script as a section of self. self.params will on
 
 Note, there will be a brief description of each parameter next to it but for a full breakdown of what they do see the MkDocs page for APySPAM
 (*Insert link here*)
+
+Inputs: self - The main object which will contain the different branches of variables. Here, the underlying parameters are defined as self.params.variable.
+
+Outputs: None, but self is considered a global object of the class Run.py. Therefore, to call these parameters in main(), use params.variable.
+
 """
 
 import numpy as np

@@ -1,3 +1,15 @@
+"""
+The algorithm is the main algorithm of APySPAM. Run here, or from command line 
+re-create a galaxy interaction. For full breakdown of it, see [url].
+
+Input: Lit of arguments from user or none. If none, code will use the Setup_Parameters.py file to define underlying interaction parameters.
+
+Outputs: Results.npy - A numpy array of Nxn dimensions (where N = 8 + No. of Telescope Filters and n = Particle Number).
+         Results.txt - As above, but in a text format.
+         
+         Results file headers are: x y z vx vy vz filter_1 filter_2 filter_3 ... Particle_Masses SFRs
+
+"""
 import numpy as np
 import sys
 
@@ -139,7 +151,8 @@ class Run:
                                                                                self.params.Galactic_Ages,self.params.e_times,self.params.h,i-1,self.Weights,self.params.n1)
     elif SFR_Algorithm == 1:
         self.params.SFR,self.Population_Mass[:,i-1],M1,M2,MT = KS_Model.SFR_KS(self.params.n1,self.params.n2,self.x0,self.params.rout1,self.params.rout2,self.params.Distance_per_Unit,
-                                                                               self.Tracer_Mass,self.params.Perturber_Position,self.params.Time_per_Unit,self.params.h)
+                                                                               self.Tracer_Mass,self.params.Perturber_Position,self.params.Time_per_Unit,self.params.h,self.params.mass1,
+                                                                               self.params.mass2,self.params.Galactic_Ages,self.params.e_times,self.Weights)
         self.Tracer_Mass -= MT
         if any(self.Tracer_Mass < 0):
             print('Somethings gone a little wrong.')
@@ -184,7 +197,7 @@ def main():
 #def main():
   global directory, directory_results
   global SFR_Algorithm
-  SFR_Algorithm = 0         # Note, a value of 0 corresponds to a delayed tau SF method and 1 is a KS one.
+  SFR_Algorithm = 0        # Note, a value of 0 corresponds to a delayed tau SF method and 1 is a KS one.
   
   directory_results = Imports.Results()
   filter_data = Imports.Filters()

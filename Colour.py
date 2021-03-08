@@ -3,6 +3,20 @@
 Created on Mon Nov  2 14:25:20 2020
 
 @author: oryan
+
+Algorithm for calculating the integrated flux of each particle for each of the 
+input telescope filters. See [url] for more information.
+
+Inputs: filter_data - [list of N numpy arrays] - List containing all of the telescope filter arrays. Each array is a 2xN array of wavelength|transmission.
+        Spectral_Density - [numpy array] - An array containing the spectra of each particle.
+        Wavelength_SED - [numpy array] - An array containing the wavelengths of the underlying SED spectra. Assumed to be the same for all SED models input.
+        redshift - [float] - The galaxies redshift.
+        n - [float] - number of particles in simulation.
+        d_cm - [float] - Distance to the galaxies in cm. 
+        
+Outputs: Flux_Export_Array - [numpy array] - a nxN of the integrated flux of each particle.
+
+
 """
 
 import numpy as np

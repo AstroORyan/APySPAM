@@ -7,7 +7,8 @@ Created on Thu Feb 18 15:12:54 2021
 This algorithm handles all of the imports and exports that APySPAM will require. The only input required is for the SSP 
 import which requires the metallicities defined in Setup_Parameters.
 
-Doing it this way allows us to only load once, and to check that the correct folders exist. 
+Doing it this way allows us to only load once, and to check that the correct folders exist.
+
 """
 # Packages
 import os

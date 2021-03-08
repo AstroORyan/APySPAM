@@ -1,6 +1,23 @@
 """
 This algorithm calculates the star formation rate and mass formed in a timestep using 
-the Delayed-Tau model.
+a Delayed-Tau model. For more info see [url to MkDocs].
+
+Inputs: Gas_Masses
+        Gal_m1/m2 - The total masses of the primary and secondary galaxies.
+        r1/r2 - The radii of the primary and secondary galaxies
+        Galaxy_Seperation - The seperation between the two galaxy centres.
+        DU/TU - Conversion from galaxy units to kpc/yr.
+        Ages - Galactic Ages.
+        e_times - e-folding times
+        timestep - Timestep defined in simulation.
+        Weights - Particle weights defined in setup.
+        n1 - The number of particles in the primary galaxy. Used as the cut-off index in the arrays to define which particle is primary or secondary. 
+        
+Outputs: SFRs - The total star formation rate at the particle position. This is both from the underlying SSP (assuming a delayed-tau model). 
+         Particle_Mass_Formed - The mass formed due to star formation enhancement. 
+         M1 - Total mass formed at the particle position (sum of underlying SSP model and enhancement) for Primary Galaxy.
+         M2 - As M1 but for secondary.
+
 """
 
 import numpy as np
@@ -27,8 +44,8 @@ class Delayed_Tau:
         Mass_Ratio_sec = Gal_m1/Gal_m2
         Baryonic_Fraction = (1 + 0.3333)/7.1333
             
-        Starburst_Enhancement_prim = 1 + 0.25*(Mass_Ratio_prim)*(Distance_Ratio_1**2)
-        Starburst_Enhancement_sec =  1 + 0.25*(Mass_Ratio_sec)*(Distance_Ratio_2**2)
+        Starburst_Enhancement_prim = 1 + (Mass_Ratio_prim)*(Distance_Ratio_1**2)
+        Starburst_Enhancement_sec =  1 + (Mass_Ratio_sec)*(Distance_Ratio_2**2)
            
         SFR_1_Total = Starburst_Enhancement_prim*((1/(e_1**2))*Age_1*np.exp(-(Age_1)/e_1))*((Baryonic_Fraction*Gal_m1*1e11)/1e9)  # 1e9 here transforms SFR from M_0/Gyr to M_0/yr
         SFR_2_Total = Starburst_Enhancement_sec*((1/(e_2**2))*Age_2*np.exp(-(Age_2)/e_2))*((Baryonic_Fraction*Gal_m2*1e11)/1e9)
@@ -38,6 +55,8 @@ class Delayed_Tau:
         SFR_Bases = [SFR_1_Base, SFR_2_Base]
         
         SFR_Enhanced = np.asarray([SFR_1_Total - SFR_1_Base,SFR_2_Total - SFR_2_Base])
+        
+        print(SFR_1_Total)
         
         SFR_Enhanced[SFR_Enhanced <= 0] = 0
         

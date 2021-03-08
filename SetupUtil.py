@@ -148,8 +148,8 @@ class SetupUtil:
     self.params.Gas_Mass_Fractions[1] = (Galaxy_2_Gas_Mass)
     
     #e-folding time equation from Cox et al (2008)
-    e1 = 2#((self.params.Gas_Mass_Fractions[0]*1.989e30)/(np.pi*(self.params.rout1*self.params.Distance_per_Unit*3.086e19)**2*(0.1*3.086e19)))**(-1/2)/1e9
-    e2 = 2#((self.params.Gas_Mass_Fractions[1]*1.989e30)/(np.pi*(self.params.rout2*self.params.Distance_per_Unit*3.086e19)**2*(0.1*3.086e19)))**(-1/2)/1e9
+    e1 = 1.5#((self.params.Gas_Mass_Fractions[0]*1.989e30)/(np.pi*(self.params.rout1*self.params.Distance_per_Unit*3.086e19)**2*(0.1*3.086e19)))**(-1/2)/1e9
+    e2 = 1.5#((self.params.Gas_Mass_Fractions[1]*1.989e30)/(np.pi*(self.params.rout2*self.params.Distance_per_Unit*3.086e19)**2*(0.1*3.086e19)))**(-1/2)/1e9
     
     self.params.e_times = [e1,e2]
     
