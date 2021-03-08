@@ -59,7 +59,7 @@ class KS_Model:
             Mass_Used[p] = Total_Mass_Formed
             
             SFR_Array[p] = KS_SFR
-                    
+                                
         M1 = np.sum(Mass_Used[:n1])
         M2 = np.sum(Mass_Used[n1:])
         
@@ -74,15 +74,12 @@ class KS_Model:
       z = Particle_Frame_Coords[:,2]
     
       Radii = np.sqrt(x*x + y*y + z*z)
-
-      criteria_r_index = [x[0] for x in enumerate(Radii) if x[1] <= 2.0]
-      Nearest_Neighbours = Radii[criteria_r_index]
       
-      if np.min(Nearest_Neighbours) == 0 and np.max(Nearest_Neighbours) == 0:
-          Particle_Size = 1
-      else:
-          Particle_Size = np.min(Nearest_Neighbours[np.nonzero(Nearest_Neighbours)])/2
-          
+      Particle_Size = np.min(Radii[np.nonzero(Radii)])/2
+      
+      if Particle_Size > 5:
+          Particle_Size = 5
+      
       Particle_Area = np.pi*(Particle_Size*1e3)**2
-      
+            
       return Particle_Area

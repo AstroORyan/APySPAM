@@ -12,7 +12,6 @@ Outputs: Results.npy - A numpy array of Nxn dimensions (where N = 8 + No. of Tel
 """
 import numpy as np
 import sys
-import matplotlib.pyplot as plt
 
 from Parameters import Parameters
 from SetupUtil import SetupUtil
@@ -165,7 +164,6 @@ class Run:
     self.params.Gas_Mass_Fractions[1] -= M2
     
     self.params.New_Populations_Age[:,:i-1] += self.params.time_in_step
-    self.params.SFH[i-1,:] = [np.sum(self.params.SFR[:self.params.n1]), np.sum(self.params.SFR[self.params.n1:])]
       
   def getFilename(self,i):
 
@@ -196,7 +194,7 @@ def main():
 #def main():
   global directory, directory_results
   global SFR_Algorithm
-  SFR_Algorithm = 1        # Note, a value of 0 corresponds to a delayed tau SF method and 1 is a KS one.
+  SFR_Algorithm = 0        # Note, a value of 0 corresponds to a delayed tau SF method and 1 is a KS one.
   
   directory_results = Imports.Results()
   filter_data = Imports.Filters()
@@ -218,7 +216,7 @@ def main():
       
   #IOUtil.writeParameterFile(params,"tmp.p")
   run.Tracer_Mass, run.Weights = Gas_Dist.Gas_Decision(model,params,run.x0)     # Calculates gas masses and weights and stores them in the self object.
-  run.Population_Mass,run.Initial_Spectral_Density,params.Avg_Population_Mass_1,params.Avg_Population_Mass_2,params.New_Populations_Age,params.SFH = SED.initSED(params.tstart,params.tend,params.h,params.n1,params.n2,run.Weights,params.mass1,
+  run.Population_Mass,run.Initial_Spectral_Density,params.Avg_Population_Mass_1,params.Avg_Population_Mass_2,params.New_Populations_Age = SED.initSED(params.tstart,params.tend,params.h,params.n1,params.n2,run.Weights,params.mass1,
                                                                                                                                                              params.mass2,params.Gas_Fraction_1,params.Gas_Fraction_2,params.Mass_per_Unit,len(Wavelength))
       
   for i in range(1,int(nstep_local+1)):
@@ -236,7 +234,7 @@ def main():
   Population_Flux_Array = Colours.Colour_Calculation(filter_data, Spectral_Density, Wavelength,params.redshift, params.n, params.d_cm)
   
   i = int(nstep_local)
-  
+
   Imports.Export(run.x0,Population_Flux_Array,run.Population_Mass,params.SFR,directory_results,params.Galaxy_Name)
   
 if __name__ == "__main__": main()

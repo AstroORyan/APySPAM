@@ -104,7 +104,6 @@ class SetupUtil:
             
       #Need to set the SFR's for each galaxy seperately based on their mass. Low Mass Galaxies have a higher SFR than high mass ones! This will only be temporary
       self.params.New_Pops_Counter = 0
-      self.params.counter = 0
       
 
     self.params.n = self.params.n1 + self.params.n2
@@ -116,18 +115,11 @@ class SetupUtil:
     self.params.Distance_per_Unit = 15  #This is in kpc
     self.params.Distance_per_Unit_m = self.params.Distance_per_Unit*3.086e19
     self.params.Mass_per_Unit = 1e11    #This is in solar masses.
-    self.params.time_in_step = self.params.h*self.params.Time_per_Unit
-
-    
+    self.params.time_in_step = self.params.h*self.params.Time_per_Unit    
     self.params.G = 6.67e-11
-    self.params.Delay_Time_Steps = 1e100
-    self.params.Duration = -1e100
-    self.params.Activate = 0
-    self.params.Deactivate = 1
     
     self.params.Gas_Mass_Fractions = np.zeros(2)
     self.params.Gas_Mass = np.zeros(self.params.n)
-    self.params.Sigma_Gas_Total = np.zeros(self.params.n)
     self.params.SFR = np.zeros(self.params.n)
     self.params.Sigma_Density = np.zeros(self.params.n)
     
@@ -135,9 +127,6 @@ class SetupUtil:
 
     Galaxy_1_Gas_Mass = Baryonic_Fraction*self.params.Gas_Fraction_1*self.params.mass1*self.params.Mass_per_Unit        #This is the Gas Masses in Solar Masses
     Galaxy_2_Gas_Mass = Baryonic_Fraction*self.params.Gas_Fraction_2*self.params.mass2*self.params.Mass_per_Unit
-    
-    self.params.Galaxy_Surface_Area_1_kpc = np.pi*(self.params.rout1*self.params.Distance_per_Unit)**2
-    self.params.Galaxy_Surface_Area_2_kpc = np.pi*(self.params.rout2*self.params.Distance_per_Unit)**2
     
     self.params.Gas_Mass_Fractions[0] = (Galaxy_1_Gas_Mass)           # This is the Gas Surface Area in M_0
     self.params.Gas_Mass_Fractions[1] = (Galaxy_2_Gas_Mass)

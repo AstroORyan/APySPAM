@@ -15,7 +15,6 @@ class SED:
         temp_1 = int(np.ceil(abs((tstart - tend)/time_step) + 2))
         Population_Mass = np.zeros([n, temp_1])  #These lines are required to store the newly created populations initial age.
         Population_Ages = np.zeros([n,temp_1])
-        SFH = np.zeros([temp_1,2])
         
     
         # First, will construct the SED Distribution of the Primary Galaxy for all particles.
@@ -24,7 +23,7 @@ class SED:
         Avg_Population_Mass1 = (1 - Gas_Fraction1)*(Baryonic_Fraction*mass1*MU)*Weights[:n1] 
         Avg_Population_Mass2 = (1 - Gas_Fraction2)*(Baryonic_Fraction*mass2*MU)*Weights[n1:]
         
-        return Population_Mass, Initial_Spectral_Density, Avg_Population_Mass1, Avg_Population_Mass2, Population_Ages, SFH
+        return Population_Mass, Initial_Spectral_Density, Avg_Population_Mass1, Avg_Population_Mass2, Population_Ages
      
         
     def Aging_initSED(n1, n, Age_1, Age_2, Pop1_Mass, Pop2_Mass,Spectral_Density_Array_1,Spectral_Density_Array_2):
