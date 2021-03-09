@@ -30,11 +30,12 @@ class Delayed_Tau:
         Age_1, Age_2 = Ages
         e_1, e_2 = e_times
         Gas_m1, Gas_m2 = Gas_Masses
+        cutoff = int(Galaxy_Seperation.shape[0]/5)
         
-        if i <= 100:
+        if i <= cutoff:
             delay = i
         else:
-            delay = 100
+            delay = cutoff
             
         Seperation_Coords = Galaxy_Seperation[i-delay]*DU
         Seperation = np.sqrt(Seperation_Coords[0]*Seperation_Coords[0] + Seperation_Coords[1]*Seperation_Coords[1] + Seperation_Coords[2]*Seperation_Coords[2])
@@ -44,8 +45,8 @@ class Delayed_Tau:
         Mass_Ratio_sec = Gal_m1/Gal_m2
         Baryonic_Fraction = (1 + 0.3333)/7.1333
             
-        Starburst_Enhancement_prim = 1 + (Mass_Ratio_prim)*(Distance_Ratio_1**2)
-        Starburst_Enhancement_sec =  1 + (Mass_Ratio_sec)*(Distance_Ratio_2**2)
+        Starburst_Enhancement_prim = 1 + 0.25*(Mass_Ratio_prim)*(Distance_Ratio_1**2)
+        Starburst_Enhancement_sec =  1 + 0.25*(Mass_Ratio_sec)*(Distance_Ratio_2**2)
            
         SFR_1_Total = Starburst_Enhancement_prim*((1/(e_1**2))*Age_1*np.exp(-(Age_1)/e_1))*((Baryonic_Fraction*Gal_m1*1e11)/1e9)  # 1e9 here transforms SFR from M_0/Gyr to M_0/yr
         SFR_2_Total = Starburst_Enhancement_sec*((1/(e_2**2))*Age_2*np.exp(-(Age_2)/e_2))*((Baryonic_Fraction*Gal_m2*1e11)/1e9)

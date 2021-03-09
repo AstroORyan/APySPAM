@@ -67,7 +67,6 @@ class KS_Model:
     
     
     def Criteria_Calculator(p,Coords):
-      criteria_r_index = np.zeros(len(Coords),dtype='int')
       Particle_Frame_Coords = Coords[:,:] - Coords[p,:]
       x = Particle_Frame_Coords[:,0]
       y = Particle_Frame_Coords[:,1]
@@ -77,8 +76,8 @@ class KS_Model:
       
       Particle_Size = np.min(Radii[np.nonzero(Radii)])/2
       
-      if Particle_Size > 5:
-          Particle_Size = 5
+      if Particle_Size > 1:
+          Particle_Size = 1
       
       Particle_Area = np.pi*(Particle_Size*1e3)**2
             
