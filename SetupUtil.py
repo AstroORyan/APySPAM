@@ -558,7 +558,7 @@ class SetupUtil:
 
 
     # include the perturbing galaxy
-    i = self.params.n - 1
+    i = self.params.n
     x0[i][0] += xx0[0]
     x0[i][1] += xx0[1]
     x0[i][2] += xx0[2]
