@@ -54,8 +54,8 @@ class Run:
 
     n = self.params.n
 
-    self.x0 = np.zeros((n+1,6))
-    self.xout = np.zeros((n+1,6))
+    self.x0 = np.zeros((n,6))
+    self.xout = np.zeros((n,6))
 
     su.createCollision()
 

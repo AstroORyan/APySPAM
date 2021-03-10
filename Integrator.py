@@ -23,9 +23,9 @@ class Integrator:
 
   # Initialize temporary storage arrays
   def initRKVar(self,n):
-    self.x = np.zeros((n+1,6))
-    self.xe = np.zeros((n+1,6))
-    self.f = np.zeros((n+1,6))
+    self.x = np.zeros((n,6))
+    self.xe = np.zeros((n,6))
+    self.f = np.zeros((n,6))
 
     #self.x = [[0] * 6 for i in range(n+1)]
     #self.xe = [[0] * 6 for i in range(n+1)]
