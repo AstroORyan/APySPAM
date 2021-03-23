@@ -236,12 +236,13 @@ def main():
   
   i = int(nstep_local)
   
+  Imports.Export(run.x0,Population_Flux_Array,run.Population_Mass,params.SFR,directory_results,params.Galaxy_Name)
+  
   if use_plotting:
       Plotting.Plotting_Function(Population_Flux_Array,i-1, run.x0, params.display_scale, params.Galaxy_Name, params.n1, params.n2, 
                                  params.SFR, params.time, params.Time_per_Unit, params.Distance_per_Unit, params.Perturber_Position, 
                                  directory_results,len(filter_data))
       
 
-  Imports.Export(run.x0,Population_Flux_Array,run.Population_Mass,params.SFR,directory_results,params.Galaxy_Name)
   
 if __name__ == "__main__": main()

@@ -79,6 +79,6 @@ class KS_Model:
       if Particle_Size > 1:
           Particle_Size = 1
       
-      Particle_Area = np.pi*(Particle_Size*1e3)**2
+      Particle_Area = 4*np.pi*(Particle_Size*1e3)**2
             
       return Particle_Area

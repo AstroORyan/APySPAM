@@ -29,7 +29,10 @@ class Plotting:
                 os.mkdir(Results_dir+folders_make[q])
         
         fluxes, maps = Plotting.Image_Array(Population_Flux_Array,Particle_Coords,image_scale,DU,SFRs)
-                                  
+        
+        white_image = np.sum(fluxes,0)
+        np.save(r'C:\Users\oryan\APySPAM\Results\Arp_256_White.npy',white_image)
+                
         maggies = Plotting.Colour_Conversion(fluxes)
         
         SFR_Map = maps[1]
@@ -72,13 +75,17 @@ class Plotting:
         x = Particle_Coords[:,0]
         y = Particle_Coords[:,1]
         
-    
-        x_space = image_scale    #We've set this up in galaxy units!
-        y_space = image_scale
+        
+        Resolution = 2
+        x_bins = 50
+        y_bins = 50
+        
+        x_space = x_bins*Resolution/15    #We've set this up in galaxy units!
+        y_space = y_bins*Resolution/15
         #We then set up a 1kpc resolution
-        Resolution = np.ceil(image_scale/10)    #In kpc
-        x_bins = int(x_space*DU/Resolution)
-        y_bins = int(y_space*DU/Resolution)
+        # Resolution = np.ceil(image_scale/10)    #In kpc
+        # x_bins = int(x_space*DU/Resolution)
+        # y_bins = int(y_space*DU/Resolution)
         
         x_step = x_space/x_bins
         y_step = y_space/y_bins
@@ -164,12 +171,19 @@ class Plotting:
 
     def Lupton_Plot(maggies,Name,Time,TU,directory_results):        
         
-        test_g = maggies[1]
+        test_g = maggies[0]
         test_r = maggies[2]
-        test_i = maggies[3]
+        test_i = maggies[1]
+        
+        Noise_Array = 1e-30*np.random.poisson(lam=5,size=[test_g.shape[0],test_g.shape[1],3])
+        
+        test_g += Noise_Array[:,:,0]
+        test_r += Noise_Array[:,:,1]
+        test_i += Noise_Array[:,:,2]
+
         
         # Note, the scalings here are those given in SDSS scripts
-        scales = np.asarray([45.0,22.0,28.0])#np.asarray([4.9,5.7,7.8]) #np.asarray([5.0,5.0,5.0])#
+        scales = np.asarray([125.0,71.43,52.63])#np.asarray([4.9,5.7,7.8]) #np.asarray([5.0,5.0,5.0])#
         scales *= 1.75*1e27
         
         fixed_image_g_filtered = test_g*scales[2]
@@ -179,17 +193,6 @@ class Plotting:
         r = np.transpose(fixed_image_i_filtered)
         g = np.transpose(fixed_image_r_filtered)
         b = np.transpose(fixed_image_g_filtered)
-        
-        Noise_Array = 1e-28*np.random.poisson(lam=5,size=[fixed_image_g_filtered.shape[0],fixed_image_g_filtered.shape[1],3])
-        
-        r += Noise_Array[:,:,0]
-        g += Noise_Array[:,:,1]
-        b += Noise_Array[:,:,2]
-        
-        kernel = Gaussian2DKernel(x_stddev=1,y_stddev=1) # NOTE: Array size is 8*x(y)_stddev
-        r = convolve(r,kernel)
-        g = convolve(g,kernel)
-        b = convolve(b,kernel)
         
         rgb_default = make_lupton_rgb(r,g,b,minimum=0, Q=10,stretch=0.05)
         plt.figure()

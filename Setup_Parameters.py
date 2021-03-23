@@ -19,13 +19,13 @@ import numpy as np
 
 class Setup_Parameters:
   def Setup_Parameters(self):      
-      self.params.n = 1000  # Total number of particles in the simulation.
+      self.params.n = 2000  # Total number of particles in the simulation.
       
-      self.params.phi1 = 301            # Both phi and theta are the initial orienation angles of the galaxies. Theta is about the y axis and phi is about the z axis.
-      self.params.theta1 = 310.8075
+      self.params.phi1 = 97.78523#301            # Both phi and theta are the initial orienation angles of the galaxies. Theta is about the y axis and phi is about the z axis.
+      self.params.theta1 = 144.6012#310.8075
       self.params.rscale1 = [0.0,0.0,1.0]       # A scaling relation used in the initial distribution of particles.
-      self.params.rout1 = 2.97913       # rout1 and rout2 are the initial radii of the primary and secondary galaxy respectively. Note, this is in Galaxy Units of 15kpc.
-      self.params.mass1 = 34.41671      # mass1 and mass2 are the total initial mass of the primary and secondary galaxy respectively. These are in Galaxy Units of 10^11M_{Solar}
+      self.params.rout1 = 0.94075#2.97913       # rout1 and rout2 are the initial radii of the primary and secondary galaxy respectively. Note, this is in Galaxy Units of 15kpc.
+      self.params.mass1 = 1.3042#34.41671      # mass1 and mass2 are the total initial mass of the primary and secondary galaxy respectively. These are in Galaxy Units of 10^11M_{Solar}
       self.params.epsilon1 = 0.3
       self.params.eps1 = self.params.epsilon1*self.params.epsilon1   # The softening length used in the SPMModel
       self.params.heat1 = 0.0           # The initial heat of the galaxy. Applied as a factor for a random z velocity and position. 
@@ -34,11 +34,11 @@ class Setup_Parameters:
       self.params.Gas_Fraction_1 = 0.17 # The Gas Fraction of the galaxy. Assumed to be a direct percentage of the total stellar mass.
       self.params.metal_1 = 0.005       # The metallicity of the initial population as a factor of Z_{Solar}. Note, default range is 0.0001 - 0.05. Cannot be outwith this range.
       
-      self.params.phi2 = 35.5
-      self.params.theta2 = 321.9876
+      self.params.phi2 = 60.52239#35.5
+      self.params.theta2 = 216.5012#321.9876
       self.params.rscale2 = [0.0,0.0,0.0]
-      self.params.rout2 = 4.2501
-      self.params.mass2 = 29.49607
+      self.params.rout2 = 0.54373#4.2501
+      self.params.mass2 = 1.25831#29.49607
       self.params.epsilon2 = 0.3
       self.params.eps2 = self.params.epsilon2*self.params.epsilon2
       self.params.heat2 = 0.0
@@ -57,13 +57,13 @@ class Setup_Parameters:
           elif random > 0.5:
               self.params.n2 += 1
       
-      r_x = -9.93853                # The FINAL position and velocity vectors of the SECONDARY galaxy.
-      r_y = -4.5805                 # Note, as algorithm used backwards integration, these vectors will form the basis of how the interaction
-      r_z = 15.43348                # is calculated.
+      r_x = -0.40739#-9.93853                # The FINAL position and velocity vectors of the SECONDARY galaxy.
+      r_y = -1.92518#-4.5805                 # Note, as algorithm used backwards integration, these vectors will form the basis of how the interaction
+      r_z = 1.95772#15.43348                # is calculated.
 
-      v_x = -1.54025
-      v_y = -2.97899
-      v_z = 4.69234
+      v_x = -1.14918#-1.54025
+      v_y = -1.02439#-2.97899
+      v_z = 0.77963#4.69234
       
       self.params.sec_vec = [r_x, r_y, r_z, v_x, v_y, v_z]
       self.params.use_sec_vec = True    # Leave as True. This means APySPAM will use the specified velocity vector rather than trying to calculate it from
@@ -74,9 +74,9 @@ class Setup_Parameters:
       # self.params.time = self.params.tstart - self.params.tend
       self.params.tIsSet = False  #TRUE = User has set time, and code will use that. FALSE = algorithm will calculate time for interaction on the fly.
       
-      self.params.redshift = 0.0225   #Galaxy redshift.
+      self.params.redshift = 0.0273   #Galaxy redshift.
       
-      self.params.Galaxy_Name = 'Arp_240'   # Name that results will be saved under. 
+      self.params.Galaxy_Name = 'Arp_256'#'Arp_240'   # Name that results will be saved under. 
       
-      self.params.display_scale = 50  # In Galaxy units (x15kpc). This will change the scale of the overall interaction plot at the end.
+      self.params.display_scale = 6  # In Galaxy units (x15kpc). This will change the scale of the overall interaction plot at the end.
                                         # WARNING!!! Making this too small may crash the code. Start big, and work down to better scales.
