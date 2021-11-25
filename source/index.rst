@@ -6,10 +6,18 @@
 Welcome to APySPAM's documentation!
 ===================================
 
+``APySPAM`` is a Python package for running interacting galaxy simulations. It takes in 16 different parameters, and returns the morphology, star formation rate distribution and flux distribution of the resultant systems.
+
+What it can do
+---------------
+
+Amazing things!
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   examples/init
 
 
 Indices and tables
