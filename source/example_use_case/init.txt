@@ -1,0 +1,11 @@
+APySPAM Integration with Other Modules
+-------------------------------------------
+
+Here is where I'm going to talk about how to use APySPAM with other modules and packages.
+
+The example I will give will be with the Emcee MCMC code, and will essentially describe my entire PhD.
+
+..toctree::
+    :maxdepth: 2
+
+    emcee_example/init
