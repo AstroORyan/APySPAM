@@ -1,0 +1,4 @@
+An Advanced Setup: Running Multiple Interacting Simulations
+-------------------------------------------------------------
+
+Imagine more than one galaxy interacting with another.

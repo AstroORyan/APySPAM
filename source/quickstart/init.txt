@@ -4,7 +4,7 @@ Usage Examples
 This section of the documentation covers some of the basic examples of using ``APySPAM``, both running and single and multiple simulations. Examples of this will be given for both using a CLI and running the code directly.
 
 .. toctree::
-    :maxdepth:
-
+    :maxdepth: 2
+    
     running_a_simulation
     running_multiple_sims
