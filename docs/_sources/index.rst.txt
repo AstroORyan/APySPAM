@@ -12,7 +12,14 @@ What it can do
 ---------------
 
 The Advanced Python Stellar Animation Module (APySPAM) is a numerical galaxy interaction modeller based on the earlier work of John Wallin and Anthony Holincheck in the Java Stellar Particle Animation Module (JSPAM). From a selection of parameters that the user 
-can tweak, this algorithm will force an interaction to occur and output images of the final morphology of the system as well as tables containing the flux distribution and star formation rate (SFR) distribution of the final system. 
+can tweak, this algorithm will:
+
+   - Simulate a close flyby of two galaxies with the given parameters;
+   - Calculate the expected change in flux distribution based on the interaction;
+   - Accurately recreate the morphology of the system;
+   - Save a flux distribution map of the resultant system;
+   - Save a .txt file of the particle positions, velocities, colour-band fluxes and final star formation rates;
+   - Save a .npy file of the particle positions, velocities, colour-band fluxes and final star formation rates.
 
 For a full description of the astrophysics of the algorithm, as well as some further use cases please see the output paper that came with this documentation (ArXiv:$INSERT_ARCHIVE_NO). The aim of this documentation is to give a very high level overview of each of the 
 different scripts the user might have to interct with, some example results as well as some basic and advanced tutorials in its use. I hope that the user finds this algorithm helpful with the work they are pursuing! Any issues or errors that you encounter in the
@@ -27,7 +34,7 @@ algorithm, please contact the author this documentation David O'Ryan at d.oryan@
    script_documentation/init
    advanced_examples/init
    results/init
-   example_use_case/init
+   example_use_case/emcee_example/init
 
 
 

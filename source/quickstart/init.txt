@@ -6,5 +6,6 @@ This section of the documentation covers some of the basic examples of using ``A
 .. toctree::
     :maxdepth: 2
     
+    introduction
     running_a_simulation
     running_multiple_sims

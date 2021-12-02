@@ -38,7 +38,17 @@
 <div class="section" id="what-it-can-do">
 <h2>What it can do<a class="headerlink" href="#what-it-can-do" title="Permalink to this headline">¶</a></h2>
 <p>The Advanced Python Stellar Animation Module (APySPAM) is a numerical galaxy interaction modeller based on the earlier work of John Wallin and Anthony Holincheck in the Java Stellar Particle Animation Module (JSPAM). From a selection of parameters that the user
-can tweak, this algorithm will force an interaction to occur and output images of the final morphology of the system as well as tables containing the flux distribution and star formation rate (SFR) distribution of the final system.</p>
+can tweak, this algorithm will:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Simulate a close flyby of two galaxies with the given parameters;</p></li>
+<li><p>Calculate the expected change in flux distribution based on the interaction;</p></li>
+<li><p>Accurately recreate the morphology of the system;</p></li>
+<li><p>Save a flux distribution map of the resultant system;</p></li>
+<li><p>Save a .txt file of the particle positions, velocities, colour-band fluxes and final star formation rates;</p></li>
+<li><p>Save a .npy file of the particle positions, velocities, colour-band fluxes and final star formation rates.</p></li>
+</ul>
+</div></blockquote>
 <p>For a full description of the astrophysics of the algorithm, as well as some further use cases please see the output paper that came with this documentation (ArXiv:$INSERT_ARCHIVE_NO). The aim of this documentation is to give a very high level overview of each of the
 different scripts the user might have to interct with, some example results as well as some basic and advanced tutorials in its use. I hope that the user finds this algorithm helpful with the work they are pursuing! Any issues or errors that you encounter in the
 algorithm, please contact the author this documentation David O’Ryan at d.oryan&#64;lancaster.ac.uk.</p>
@@ -47,6 +57,7 @@ algorithm, please contact the author this documentation David O’Ryan at d.orya
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation/init.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart/init.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart/running_a_simulation.html">Back to Basics: Running a Simulation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart/running_multiple_sims.html">An Advanced Setup: Running Multiple Interacting Simulations</a></li>
 </ul>
@@ -54,7 +65,7 @@ algorithm, please contact the author this documentation David O’Ryan at d.orya
 <li class="toctree-l1"><a class="reference internal" href="script_documentation/init.html">Full Module Descriptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced_examples/init.html">Advanced Use of APySPAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="results/init.html">Results</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example_use_case/init.html">APySPAM Integration with Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_use_case/emcee_example/init.html">Integration with Emcee</a></li>
 </ul>
 </div>
 </div>
@@ -99,7 +110,7 @@ algorithm, please contact the author this documentation David O’Ryan at d.orya
 <li class="toctree-l1"><a class="reference internal" href="script_documentation/init.html">Full Module Descriptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced_examples/init.html">Advanced Use of APySPAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="results/init.html">Results</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example_use_case/init.html">APySPAM Integration with Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_use_case/emcee_example/init.html">Integration with Emcee</a></li>
 </ul>
 
 <div class="relations">
