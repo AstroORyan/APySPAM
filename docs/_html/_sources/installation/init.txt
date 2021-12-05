@@ -1,0 +1,4 @@
+Installation
+--------------
+
+Right, so, here's how you install this thing as a Python package...

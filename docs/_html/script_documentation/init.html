@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Full Module Descriptions &#8212; APySPAM  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Advanced Use of APySPAM" href="../advanced_examples/init.html" />
+    <link rel="prev" title="An Advanced Setup: Running Multiple Interacting Simulations" href="../quickstart/running_multiple_sims.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="full-module-descriptions">
+<h1>Full Module Descriptions<a class="headerlink" href="#full-module-descriptions" title="Permalink to this headline">¶</a></h1>
+<p>This section will be a full breakdown of every module in PySPAM, as well as going into detail about
+each module in the original JSPAM which has been ported over. If you are looking to just get this
+algorithm and get some simulations running, I’d recommend looking at the example sections! This
+section will go into far more detail than you need.</p>
+<p>If youre having problems in specific modules or setups, it might be best to check the FAQ section
+first. If issues are still being encountered, this section is the place to be! If this section
+doesn’t solve your problem, please don’t hesitate to email me with questions/bug fixes at
+<a class="reference external" href="mailto:d&#46;oryan&#37;&#52;&#48;lancaster&#46;ac&#46;uk">d<span>&#46;</span>oryan<span>&#64;</span>lancaster<span>&#46;</span>ac<span>&#46;</span>uk</a>.</p>
+<p>This section will consist of a brief description of each file in the module, followed by detailed
+descriptions of each function. For the docstrings, see the actual code!</p>
+<p>So, with that out of the way, let’s get started…</p>
+<div class="section" id="colour">
+<h2>colour<a class="headerlink" href="#colour" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">colour.py</span></code> is the most computationally intense module in the overall algorithm. It is where the
+colour fluxes of each particle are calculated. This must be done by calculating the ages and stellar
+masses of each particles population throughout the entire simulation. The functions to do this are
+contained in here.</p>
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Constants.py</span></code> is a utility module which was in the original JSPAM. While not used explicitly in
+APySPAM, it is very useful to be able to quickly see how to convert from simulation units to physical
+units. For reference, a table of the conversions is shown below:</p>
+<p><strong>INSERT_TABLE</strong></p>
+</div>
+<div class="section" id="forcemodel">
+<h2>ForceModel<a class="headerlink" href="#forcemodel" title="Permalink to this headline">¶</a></h2>
+<p>This function is what calculates the forces on each particle, based upon the underlying physical model
+the user has inputted (i.e, NB, MOND or SPM). This utilises a Runge-Kutta update algorithm to calculate
+all new positions and velocities of the particles at each time step using the given model.</p>
+</div>
+<div class="section" id="gas-dist">
+<h2>Gas_Dist<a class="headerlink" href="#gas-dist" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Gas_Dist</span></code> is an initialization function. It utilises a user specified gas distribution model over the
+disk of the galaxy to give a gas fraction to each particle. This gas fraction will later be used to
+weight the total star formation that can occur in each particle throughout the simulation.</p>
+</div>
+<div class="section" id="integrator">
+<h2>Integrator<a class="headerlink" href="#integrator" title="Permalink to this headline">¶</a></h2>
+<p>Module from the original JSPAM algorithm. This conducts the actual integration of updating the particles
+position and velocities from the ForceModel script.</p>
+</div>
+<div class="section" id="ioutil">
+<h2>IOUtil<a class="headerlink" href="#ioutil" title="Permalink to this headline">¶</a></h2>
+<p>This is another utility function. Standing for Input-Output Utility, it conducts imports of the colour
+filters the user wants to simulate viewing the interacting systems through. It also conducts the two
+saving functions to a <code class="docutils literal notranslate"><span class="pre">.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">.npy</span></code> file. Go here if you want to edit paths manually rather
+than specifying in the CLI input.</p>
+</div>
+<div class="section" id="mathutil">
+<h2>MathUtil<a class="headerlink" href="#mathutil" title="Permalink to this headline">¶</a></h2>
+<p>A final utility function which contains many used astrophysical equations for speedup. Using
+functionality like this decreases computation time, so is very useful.</p>
+</div>
+<div class="section" id="mondmodel">
+<h2>MONDModel<a class="headerlink" href="#mondmodel" title="Permalink to this headline">¶</a></h2>
+<p>This function calculates the total forces on each particle in the simulation from either unit galaxy.
+This assumes a Modified Newtonian Dynamic (MOND) cosmology. All forces calculated in this script are
+output to <code class="docutils literal notranslate"><span class="pre">Integrator</span></code>.</p>
+</div>
+<div class="section" id="nbimodel">
+<h2>NBIModel<a class="headerlink" href="#nbimodel" title="Permalink to this headline">¶</a></h2>
+<p>If selected by the user, this function will calculate the total force and direction on each particle
+using a Lambda Cold Dark Matter cosmology in a purely N-body model. All forces calculated in this script
+are output to <code class="docutils literal notranslate"><span class="pre">Integrator</span></code>.</p>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>A file containing a list of all the parameters that a user can adjust. This file is easier to use as the
+input than attempting to type in all the parameters in the CLI. If the user wishes, however, the
+parameters can be updated directly in the Setup Utility function. This file serves as a good reference
+for what can be adjusted.</p>
+</div>
+<div class="section" id="plotting-function">
+<h2>Plotting_Function<a class="headerlink" href="#plotting-function" title="Permalink to this headline">¶</a></h2>
+<p>This file contains all functions required for mapping out the physical light distributions of the
+resulting galactic morphologies. If the user wishes, they can activate this mapping for each filter
+individually, a lupton_rgb map (a close approximation to an actual observation in the filters), a gas
+distribution map and a star formation map. By default, this function only creates and saves a white light
+image.</p>
+<p>Also note, a flag can be used to execute this function over numerous timestep intervals, giving the user
+the ability to make a film of the interaction occurring. This, however, massively increases the
+computational expense of the module.</p>
+</div>
+<div class="section" id="run">
+<h2>Run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h2>
+<p>The main module of the algorithm, and the one I’m going to spend the most time talking about. This
+function is where we run the entire simulation from, and has many functions linking to all of the other
+modules described here.</p>
+</div>
+<div class="section" id="seds">
+<h2>SEDs<a class="headerlink" href="#seds" title="Permalink to this headline">¶</a></h2>
+<p>This file contains all functions necessary for creating, updating and overwriting the Spectral Energy
+Distributions of each particle. Note, this file mainly deals with setup and manipulation of these
+results. All calculations are done in other files.</p>
+</div>
+<div class="section" id="setuputil">
+<h2>SetupUtil<a class="headerlink" href="#setuputil" title="Permalink to this headline">¶</a></h2>
+<p>This is the Setup Utility file, containing all the functions required for setting up the interaction.
+In this file, the user can alter the initial parameters of the interaction, as well as change some
+flags as to how the interaction will be forced.</p>
+</div>
+<div class="section" id="sfr-calculation">
+<h2>SFR_Calculation<a class="headerlink" href="#sfr-calculation" title="Permalink to this headline">¶</a></h2>
+<p>This is a rapid function which is called in every timestep. It calculates the star formation rate at
+each timestep and then converts this into a total mass formed at each particle in each timestep. This
+is then returned as the total mass of a new stellar population at each timestep.</p>
+</div>
+<div class="section" id="spmmodel">
+<h2>SPMModel<a class="headerlink" href="#spmmodel" title="Permalink to this headline">¶</a></h2>
+<p>This function calculates the force on each particle from both unit galaxy’s assuming a Softened Point
+Mass potential. This is slightly more computationally intense than the other two users, but can lead to
+more accurate final representations of morphology.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">APySPAM</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=AstroORyan&repo=APySPAM&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/init.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/init.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Full Module Descriptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#colour">colour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#forcemodel">ForceModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gas-dist">Gas_Dist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integrator">Integrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ioutil">IOUtil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mathutil">MathUtil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mondmodel">MONDModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nbimodel">NBIModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plotting-function">Plotting_Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run">Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seds">SEDs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setuputil">SetupUtil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sfr-calculation">SFR_Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spmmodel">SPMModel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_examples/init.html">Advanced Use of APySPAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../results/init.html">Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_use_case/emcee_example/init.html">Integration with Emcee</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../quickstart/running_multiple_sims.html" title="previous chapter">An Advanced Setup: Running Multiple Interacting Simulations</a></li>
+      <li>Next: <a href="../advanced_examples/init.html" title="next chapter">Advanced Use of APySPAM</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, David O'Ryan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/script_documentation/init.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
