@@ -7,9 +7,29 @@ Created on Tue Aug 31 17:06:40 2021
 import math
 
 class MathUtil:
-  # Builds a rotation matrix for rotating about the
-  #specified axis by the specified angle in radians.
+  '''
+  Builds a rotation matrix for rotating about the specified axis by the specified angle in radians.
+  Utilises the angles defined in SetupUtil to rotate both galaxies with respect to the plane of the sky.
+  Zero degrees is in the plane of the sky.
+  '''
   def buildRot(angle, axis):
+    '''
+    This function builds the rotation matrix which is used to initially rotate the primary and secondary
+    galaxies with respect to the sky.
+
+    Parameters
+    ------------
+    angle:
+      A Tuple of [Phi, Theta] used to build the rotation matrix.
+    axis:
+      An array of [1, 2, 3]. Used to define the x,y,z axis to rotate the galaxy about and create the 
+      rotation matrix.
+
+    Returns
+    ----------
+    mat:
+      A 3x3 matrix used to rotate the galaxies, and update the positional information of each particle.
+    '''
     X_AXIS = 1
     Y_AXIS = 2
     Z_AXIS = 3
