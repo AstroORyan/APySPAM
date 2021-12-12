@@ -14,6 +14,17 @@ import matplotlib.pyplot as plt
 
 class colour:
     def get_filters(folder):
+        """
+        Import the filters to "observe" the interacting galaxies with. Expects files of a .txt or .dat 
+        format. Expects files in the same layout as those on the SVO Service 
+        (http://svo2.cab.inta-csic.es/theory/fps/index.php). These have one column of wavelengths (A) 
+        and the other transmission. For ease of use, download filter data from there!
+
+        Parameters
+        -----------
+        folder:
+            Specified path to folder containing filters.
+        """
         filter_folder = folder+'\\Filters\\'
         filters = glob.glob(filter_folder+'*.*')
         
@@ -26,50 +37,96 @@ class colour:
         return filter_data
     
     def get_dist(z):
-      Omega_Matter = 0.308   #These values utilise a Reference Frame defined by the NASA ED
-      Omega_Vacuum = 0.692
-      Omega_tot = (Omega_Matter + Omega_Vacuum)
-      H_0 = 67.8
-      q_0 = -0.59
-      
-      Z = z - (z**2)*(1+q_0)/2
-      Dnow = 2.9998e8*Z/H_0
-      x = (1-Omega_tot)*Z**2
-      if x < 0:
-          J_x = np.sin(np.sqrt(-x))/np.sqrt(-x)
-      elif x > 0:
-          J_x = np.sinh(np.sqrt(x))/np.sqrt(x)
-      elif x == 0:
-          J_x = 1 + (x/6) + (x**2)/120
-      D_A = Dnow*J_x/(1+z)
-      D_L = ((1+z)**2)*D_A   #This gives the distance in kiloparsecs.
-      
-      parsec_cm = 3.086e21                  #This is kiloparsecs in centimeters.
-      d_cm = D_L*parsec_cm
-      
-      return d_cm
+        """
+        Calculate the light-distance to galaxy pair using cosmological parameters.
+
+        Parameters
+        ------------
+        z:
+            Redshift of galaxy.
+
+        Returns
+        ---------
+        d_cm:
+            Distance to interacting pair in cm.
+        """
+        Omega_Matter = 0.308   #These values utilise a Reference Frame defined by the NASA ED
+        Omega_Vacuum = 0.692
+        Omega_tot = (Omega_Matter + Omega_Vacuum)
+        H_0 = 67.8
+        q_0 = -0.59
+        
+        Z = z - (z**2)*(1+q_0)/2
+        Dnow = 2.9998e8*Z/H_0
+        x = (1-Omega_tot)*Z**2
+        if x < 0:
+            J_x = np.sin(np.sqrt(-x))/np.sqrt(-x)
+        elif x > 0:
+            J_x = np.sinh(np.sqrt(x))/np.sqrt(x)
+        elif x == 0:
+            J_x = 1 + (x/6) + (x**2)/120
+        D_A = Dnow*J_x/(1+z)
+        D_L = ((1+z)**2)*D_A   #This gives the distance in kiloparsecs.
+        
+        parsec_cm = 3.086e21                  #This is kiloparsecs in centimeters.
+        d_cm = D_L*parsec_cm
+        
+        return d_cm
   
     def get_ext(wav,flux):
-    #Quickly Apply an extinction algorithm
-      Coefficient = np.zeros(len(wav))
-      test_wav = wav*1e-10/1e-6
-      E_B_V = 0.44
-      for i in range(len(wav)):              # Equations are from arxiv astro-ph/0109035
-          if test_wav[i] < 0.12:
-              Coefficient[i] = 0
-          elif (test_wav[i] >= 0.12 and test_wav[i] <= 0.63):
-              Coefficient[i] = 1.17*(-2.156 + 1.509/test_wav[i] - 0.198/(test_wav[i]**2) + 0.011/(test_wav[i]**3)) + 1.78
-          elif (test_wav[i] > 0.63 and test_wav[i] <= 2.2):
-              Coefficient[i] = 1.17*(-1.857 + 1.040/test_wav[i]) + 1.78
-          else:
-              Coefficient[i] = 0
+        """Calculate the extinction of observed flux for each particle using equations from
+        astro-ph/0109035.
+
+        Parameters
+        ------------
+        wav:
+            The incoming wavelength (A).
+        flux:
+            The incoming flux (from found SEDs in simulation per particle).
+
+        return:
+            Extinction-applied flux.
+        """
+        #Quickly Apply an extinction algorithm
+        Coefficient = np.zeros(len(wav))
+        test_wav = wav*1e-10/1e-6
+        E_B_V = 0.44
+        for i in range(len(wav)):              # Equations are from arxiv astro-ph/0109035
+            if test_wav[i] < 0.12:
+                Coefficient[i] = 0
+            elif (test_wav[i] >= 0.12 and test_wav[i] <= 0.63):
+                Coefficient[i] = 1.17*(-2.156 + 1.509/test_wav[i] - 0.198/(test_wav[i]**2) + 0.011/(test_wav[i]**3)) + 1.78
+            elif (test_wav[i] > 0.63 and test_wav[i] <= 2.2):
+                Coefficient[i] = 1.17*(-1.857 + 1.040/test_wav[i]) + 1.78
+            else:
+                Coefficient[i] = 0
          
-      flux = flux*10**(-0.4*Coefficient*E_B_V)
+        flux_ext = flux*10**(-0.4*Coefficient*E_B_V)
       
-      return flux
+        return flux_ext
     
     def get_colour(SED,Wavelength,filters,z):
-        
+        """
+        From the found Spectral Energy Distributions of the each particle, find the colour flux observed
+        from each particle by applying the filter transmissions.
+
+        Parameters
+        ------------
+        SED:
+            Spectral Energy Distrbution found at each particle. Calculated in simulation.
+        Wavelength:
+            The wavelength corresponding to each flux in the SED. Taken from the input Simple Stellar
+            Population model.
+        filters:
+            2D arrays of each filters transmission and corresponding wavelength.
+        z:
+            Redshift of the interacting pair.
+
+        Returns
+        ---------
+        part_colours:
+            The colour flux distribution observed at each particle in each filter.
+        """
         c = 2.988e8
         conv_units = 3.826e33   # To convert units from default GALEX units to ergs/s. Found from GALEX documentation. 
         

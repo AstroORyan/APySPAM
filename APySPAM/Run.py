@@ -139,10 +139,6 @@ class Run:
     each of them. 
     
     This function uses the Runge-Kutta integration function found in Integrator.py.
-    
-    Returns
-    -------
-    None.
 
     '''
     self.integrator.rk4(self.x0,self.xout,self.params.h)
@@ -155,8 +151,8 @@ class Run:
     '''
     Parameters
     ----------
-    i : int
-        Total number of time steps taken in the simulation.
+    i :
+      Total number of time steps taken in the simulation.
         
     Returns
     -------

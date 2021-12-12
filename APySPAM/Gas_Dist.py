@@ -7,7 +7,41 @@ Created on Wed Sep  1 14:06:44 2021
 import numpy as np
 
 class Gas_Dist:
+    """
+    Class for computing the gas mass at each particle from the galaxy gas reservoir. This gas mass is
+    also used to assign the particles weights which can be used to distribute global star formation for
+    each particle.
+    """
     def MN_Dist(r1,r2,n1,n,Gas_Mass,x0,Sec_Initial_Coords):
+        '''
+        Calculate the gas distribution using a Miyamoto-Nagai mass distribution. This distribution 
+        is based on the Miyamoto-Nagai potential. Source: Miyamoto & Nagai, PASJ, 1975.
+
+        Parameters
+        -----------
+        r1:
+            Radius of the primary galaxy.
+        r2:
+            Radius of the secondary galaxy.
+        n1:
+            Number of particles in the primary galaxy.
+        n: 
+            Total particles in the simulation.
+        Gas_mass:
+            Tuple of the [primary, secondary] gas masses in each reservoir.
+        x0:
+            Initial positions of galaxies particles (x,y,z).
+        Sec_Initial_Coords:
+            Initial secondary galaxy position (convert reference frame from primary to secondary galaxy).
+
+        Return
+        ---------
+        Particle_Weights:
+            The weight of each particle for calculating SFR. Calculated from the total initial gas mass
+            calculated.
+        Tracer_Mass:
+            The total gas mass assigned to each particle in Solar Masses.
+        '''
         # First, need to define conversion to physical units.
         DU = 15
         R = np.zeros(n)

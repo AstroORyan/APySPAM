@@ -1,4 +1,0 @@
-Back to Basics: Running a Simulation
------------------------------------------
-
-Currently, you should just imaging galaxies interacting.
