@@ -46,9 +46,29 @@ class Integrator:
     if self.force is not None:
       self.force.deallocateVars()
 
-  # Using the provided ForceModel, compute the updated positions and velocities
-  # by taking a step of size h.  These are computed for all particles.
+
   def rk4(self,x0, xout, h):
+      '''
+      Using the provided ForceModel, compute the updated positions and velocities
+      by taking a step of size h.  These are computed for all particles. This is done using a
+      Runge-Kutta methodology.
+
+      Paramters
+      ------------
+      self:
+        Object containing all parameters created and assigned in SetupUtil.
+      x0:
+        A Nx6 array containing all the positions and velocities of the particles from the previous timestep.
+      xout:
+        An empty, initialised array for all the updated particle positions and velocities.
+      h:
+        The timestep taken (in galaxy units).
+
+      Return
+      ----------
+      [updated self object]:
+        Exports updated particle positions and velocities.
+      '''
     n = len(x0)
     i=0
 
@@ -83,9 +103,29 @@ class Integrator:
     # end rk4
 
 
-  # Using the provided ForceModel, compute the updated position and velocity of
-  # the secondary galaxy by taking a step of size h.
   def rk41(self,xx0,xxe,h):
+      '''
+      Using the provided ForceModel, compute the updated position and velocity of
+      the secondary galaxy by taking a step of size h.
+
+      Parameters
+      ------------
+      self:
+        Object containing all the parameters created in SetupUtil.
+      xx0:
+        Initial positions and velocities of all particles in the secondary galaxy. Still in the 
+        primary galaxies frame.
+      xxe:
+        Empty array to contain all the updated particle positions and velocities for the secondary galaxy.
+      h:
+        The timestep taken. In galaxy units.
+      
+      Return
+      --------
+      [self object]:
+        Updated galaxy positions and velocities for the secondary galaxy. 
+      '''
+
     x = [0,0,0,0,0,0,0]
     f = [0,0,0,0,0,0,0]
 
