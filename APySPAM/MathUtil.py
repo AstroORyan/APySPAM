@@ -5,6 +5,7 @@ Created on Tue Aug 31 17:06:40 2021
 @author: oryan
 """
 import math
+import numpy as np
 
 class MathUtil:
   '''
@@ -34,7 +35,7 @@ class MathUtil:
     Y_AXIS = 2
     Z_AXIS = 3
        
-    mat = [[0] * 3 for i in range(3)]
+    mat = np.zeros([3,3]) #[[0] * 3 for i in range(3)]
     cosa = math.cos(angle)
     sina = math.sin(angle)
         
@@ -62,6 +63,21 @@ class MathUtil:
     
   # Calculates cross product of two vectors.
   def cross(v1,v2):
+    """
+    Conducts the cross product between two vectors.
+
+    Parameters
+    --------------
+    v1:
+      Primary velocity vector.
+    v2:
+      Secondary velocity vector.
+
+    Returns
+    ----------
+    v:
+      Cross product of the two input vectors.
+    """
     v=[0,0,0]
         
     v[0] = v1[1]*v2[2]-v1[2]*v2[1]
@@ -73,6 +89,20 @@ class MathUtil:
  
   # Calculates the dot product of two vectors.
   def dot(v1,v2):
+    '''
+    Computes the dot product of two vecotrs. Should be an artifact of the old version of JSPAM, and not be used anymore. Have updated to use numpy function instead.
+
+    Parameters
+    -----------
+    v1:
+      Primary vector.
+    v2:
+      Secondary vector.
+    
+    Returns
+    ---------
+    cp: The dot product of two vectors.
+    '''
     size = len(v1)
     cp = 0.0
         
@@ -83,11 +113,29 @@ class MathUtil:
 
   # Calculates the magnitude of the vector.
   def mag(v):
-    return math.sqrt(MathUtil.dot(v,v))
+    '''
+    Calculates the magnitude between two vectors.
+    '''
+    return math.sqrt(np.dot(v,v))
    
  
   # Add two vectors.
   def add(v1, v2):
+    '''
+    Adds two vectors together. Again, an artifact of old JSPAM. Have removed as Python can now handle this without the need for a for loop.
+
+    Parameters
+    -----------
+    v1:
+      Primary vector.
+    v2:
+      Secondary vector.
+    
+    Returns
+    --------
+    v:
+      The sum of the two vectors.
+    '''
     size = len(v1)
     v = [0]*size
    
@@ -99,6 +147,21 @@ class MathUtil:
 
   # Sub two vectors.
   def sub(v1, v2):
+    '''
+    Subtracts two vectors. Should be an artifact of old JSPAM, and should be removed from code.
+
+    Parameters
+    -----------
+    v1:
+      Primary vector.
+    v2:
+      Secondary vector.
+    
+    Returns
+    --------
+    v:
+      The subtracted vector.
+    '''
     size = len(v1)
     v = [0]*size
    
@@ -110,6 +173,7 @@ class MathUtil:
     
   # Scale the vector by the specified multiplier.
   def scale(sc, v1):
+    
     size = len(v1)
     v = [0]*size
    
@@ -123,7 +187,7 @@ class MathUtil:
   def angleBetween(v1,v2):
     m1 = MathUtil.mag(v1)
     m2 = MathUtil.mag(v2)
-    ang = MathUtil.dot(v1,v2)/(m1*m2)
+    ang = np.dot(v1,v2)/(m1*m2)
     ang = math.acos(ang)
 
     return ang
