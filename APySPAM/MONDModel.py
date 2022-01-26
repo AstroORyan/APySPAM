@@ -16,6 +16,18 @@ SQRT2INV = 1.0/math.sqrt(2.0)
 class MONDModel(ForceModel):
 
   def __init__(self):
+    '''
+    Initialisation of all required variables in the self object. A very Java way of doing things, but what can you do.
+
+    Parameters
+    -----------
+    self:
+      Object containing all of the parameters which will be used and updated throughout the simulation.
+    
+    Returns
+    --------
+      Self object with initialised parameters added to it.
+    '''
 
     # temporary storage arrays dependent on n
     self.r22 = []
@@ -44,6 +56,21 @@ class MONDModel(ForceModel):
 
   # Sets the simulation parameters to this model.
   def setParameters(self, p):
+    '''
+    Sets the variables to the full object rather than the sub-set params class in the self object. Again, a very Java way of programming.
+
+    Parameters
+    -----------
+    self:
+      Object containing all of the parameters required to run the simulation.
+    p:
+      All parameters read in from SetupUtil.
+    
+    Returns
+    -------
+    self:
+      Updated self object with added in parameters not in the params class.
+    '''
     self.params = p
 
     if p is not None:
@@ -56,6 +83,21 @@ class MONDModel(ForceModel):
 
   # Initialize temporary storage.
   def initVars(self, n):
+    '''
+    Initialisation functions. Done for further speed and memory allocation.
+
+    Parameters
+    ----------
+    self:
+      Object containing all parameters needed for simulation run.
+    n:
+      Total number of particles in the simulation (defined by the user in SetupUtil) + 1.
+    
+    Returns
+    --------
+      Self object with updated parameters.
+
+    '''
     self.r22 = np.zeros(n)
     self.r21 = np.zeros(n)
     self.r1 = np.zeros(n)
@@ -77,6 +119,19 @@ class MONDModel(ForceModel):
 
   # Cleanup temporary storage.
   def deallocateVars(self):
+    '''
+    Deallocates the temporary variables to save space in memory.
+
+    Parameters
+    ----------
+    self:
+      Object containing all parameters required for simulation as well as some temporary parameters.
+
+    Return
+    -------
+    self:
+      Object containing all parameters required for simulation but with temporary parameters removed.
+    '''
     self.r22 = None
     self.r21 = None
     self.r1 = None
@@ -88,18 +143,57 @@ class MONDModel(ForceModel):
 
 
 
-  # Compute the circular velocity for a particle at a distance r from the specified mass.
-  # The rout scale of the disk and softening length, eps, are provided.
+  
   def circularVelocity(self,mass,r,rout,eps):
+    '''
+    Compute the circular velocity for a particle at a distance r from the specified mass.
+    The rout scale of the disk and softening length, eps, are provided by the user in SetupUtil.
+
+    Parameters
+    ----------
+    self:
+      Object containing all parameters required for simulation to be conducted.
+    mass:
+      Mass of the galaxy which has been input into the function (Done once for Primary and then again for secondary influence).
+    r:
+      Radius of the particle (in simulation units) from the galaxy in question (either primary or secondary).
+    rout:
+      Radius of the galaxy.
+    eps:
+      Softening length (specified in SetupUtil). Required for this kind of force model.
+
+    Returns
+    --------
+    v:
+      The circular velocity of the particle.
+    '''
     ftotal = mass / ( r*r + eps )
-    tmp = 2.0*Constants.A0/ftotal;
+    tmp = 2.0*Constants.A0/ftotal
     ftotal = ftotal * SQRT2INV * math.sqrt(1.0 + math.sqrt(1.0 + tmp*tmp))
     v = math.sqrt(ftotal*r)
 
     return v
 
-  # For the given particle positions and velocities, calculate the accelerations.
   def diffeq(self,x,f):
+    '''
+    For the given particle positions and velocities, calculate the accelerations. Will be required for the updating the positions of each
+    particle at each timestep.
+
+    Parameters
+    -----------
+    self:
+      Object containing all the parameters required for the simulation.
+    x:
+      Vector containing the given particle position and velocity.
+    f:
+      Force upon the particle, though not really required here.
+
+    Returns
+    --------
+    self:
+      Self object updated with the particle accelerations at their positions and velocities as well as force on that particle.
+
+    '''
 
     n = len(x)
 
@@ -172,8 +266,26 @@ class MONDModel(ForceModel):
     f[:,5] = tmp1*x[:,2] + tmp2*(x[:,2]-self.xn[2]) + tmp3*self.xn[2]
 
 
-  #Calculate the acceleration felt by the secondary galaxy in orbit around the primary.
   def diffq1(self,x,f):
+    '''
+    Calculate the acceleration felt by the secondary galaxy in orbit around the primary. To be used when conducting the 
+    backward/forward integration of the interaction. This function is NOT applied to the particles.
+
+    Parameters
+    ----------
+    self:
+      Object containing all the parameters needed for the interaction.
+    x:
+      Secondary galaxy position.
+    f:
+      Force upon the secondary galaxy.
+
+    Return
+    -------
+    self:
+      Updated self object containing the forces upon the galaxy in question.
+
+    '''
     r21 = 0
     r1 = 0
     a1 = 0
