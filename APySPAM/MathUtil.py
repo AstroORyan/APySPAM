@@ -173,6 +173,21 @@ class MathUtil:
     
   # Scale the vector by the specified multiplier.
   def scale(sc, v1):
+    '''
+    Scales a vector by a given scalar. Again, should be an artifact of old JSPAM and not used anymore.
+
+    Parameters
+    -----------
+    sc:
+      Scale to alter vector by.
+    v1:
+      Vector to scale/
+    
+    Returns
+    --------
+    v:
+      Newly scaled vector.
+    '''
     
     size = len(v1)
     v = [0]*size
@@ -185,6 +200,22 @@ class MathUtil:
 
   # Determine the angle of rotation between two vectors.
   def angleBetween(v1,v2):
+    '''
+    Uses the equation of the dot product to find the angle between two given vectors' direction. Again, should be deprecated and not used in code.
+    Replaced by math or numpy modules.
+    
+    Parameter
+    ----------
+    v1:
+      Primary vector.
+    v2:
+      Secondary vector.
+    
+    Returns
+    ---------
+    ang:
+      Angle between vectors v1 and v2.
+    '''
     m1 = MathUtil.mag(v1)
     m2 = MathUtil.mag(v2)
     ang = np.dot(v1,v2)/(m1*m2)
@@ -196,6 +227,22 @@ class MathUtil:
   # Multiplies a 3x3 matrix by a 3 vector.
   # It is mildly optimized by unrolling loops.
   def mult3(m,v):
+    '''
+    Multiplies a matrix and a vector. Done by unrolling loops. I believe numpy or math functions are faster than using a pre-written function like this.
+    Should be depracated and not used in code.
+
+    Parameters
+    -----------
+    m:
+      Matrix to multiply vector by.
+    v:
+      Vector to multiply by.
+
+    Returns
+    -------
+    b:
+      New 3x3 matrix found by multiplying matrix m by vector v.
+    '''
     b = [0,0,0]
 
     if len(v) < 3 :
@@ -210,6 +257,22 @@ class MathUtil:
  
   # Multiplies an N vector by an MxN matrix.
   def mult(m,v):
+    '''
+    Multiplies a N vector by an MxN matrix. Should be deprecated, and not used in main code anymore as numpy or math module functions will be more 
+    optimised.
+
+    Parameters
+    ----------
+    m:
+      MxN matrix to be multiplied.
+    v:
+      N vector to multiply by matrix.
+    
+    Returns
+    --------
+    b:
+      Solution to above multiplication and an MxN matrix.
+    '''
     col = len( m[0])
     row = len(m)
     

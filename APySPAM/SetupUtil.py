@@ -102,7 +102,7 @@ class SetupUtil:
     self.params.Ages = [Age_1, Age_2]
     self.params.metallicity = [metal_1,metal_2]
     
-    self.params.redshift = 0.0273
+    self.params.redshift = 0.039#0.0273
 
     self.params.n = 1000
     self.params.n1 = int(self.params.n*(self.params.mass1/(self.params.mass1 + self.params.mass2)))    # Number of particles in the primary and secondary galaxy.

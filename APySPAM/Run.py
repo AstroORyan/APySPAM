@@ -210,7 +210,7 @@ def main():
                     algorithms.
   '''
     
-  folder = 'C:\\Users\\oryan\\Documents\\PySPAM_Original_Python\\'
+  folder = 'C:\\Users\\oryan\\Documents\\PySPAM_Original_Python\\APySPAM\\'
   filters = colour.get_filters(folder)
       
   run = Run()

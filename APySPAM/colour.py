@@ -71,6 +71,7 @@ class colour:
         parsec_cm = 3.086e21                  #This is kiloparsecs in centimeters.
         d_cm = D_L*parsec_cm
         
+        
         return d_cm
   
     def get_ext(wav,flux):
