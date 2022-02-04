@@ -54,7 +54,7 @@ class SetupUtil:
   #Loads in parameters for the collision. 
   def customCollision(self):
 
-    self.params.tIsSet = False
+    self.params.tIsSet = True
 
     self.params.phi1   = 97.78523
     self.params.theta1 = 144.6012
@@ -83,7 +83,7 @@ class SetupUtil:
     self.params.h = 0.05#Parameters.hbase
     self.params.time = -10
     self.params.tstart = -10
-    self.params.tIsSet = False
+    self.params.tIsSet = True
     
     rx = -0.40793
     ry = -1.92518
@@ -97,8 +97,11 @@ class SetupUtil:
     
     Gas_Fraction_1 = 0.15
     Gas_Fraction_2 = 0.15
+
+    baryonic_mass_1 = self.params.mass1 * (0.3333 + 1) / 7.13333
+    baryonic_mass_2 = self.params.mass2 * (0.3333 + 1) / 7.13333
     
-    self.params.Gas_Mass = [Gas_Fraction_1*self.params.mass1, Gas_Fraction_2*self.params.mass2]
+    self.params.Gas_Mass = [Gas_Fraction_1*baryonic_mass_1, Gas_Fraction_2*baryonic_mass_2]
     self.params.Ages = [Age_1, Age_2]
     self.params.metallicity = [metal_1,metal_2]
     

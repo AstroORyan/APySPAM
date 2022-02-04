@@ -48,7 +48,7 @@ class SED:
         return Spectral_Density
     
     def SFR_Flux(Spec_Ages,Spectra,Age,n,time,Mass,h):
-        t_index = int(time/h) + 1
+        t_index = int(time/h)
         
         # Then, define the 3D array which will have what I need. 
         temp_SFR = np.zeros([6900,t_index])

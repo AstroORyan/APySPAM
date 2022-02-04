@@ -21,6 +21,7 @@ from Gas_Dist import Gas_Dist
 from Plotting_Function import Plotting_Function
 from SEDs import SED
 from colour import colour
+from tqdm import tqdm
 
 class Run:
 
@@ -230,11 +231,10 @@ def main():
   time_interval = (params.tend-t0)*2;
   #IOUtil.writeParameterFile(params,"tmp.p")
 
-  for i in range(1,int(nstep_local+1)):
+  for i in tqdm(range(1,int(nstep_local+1))):
     run.takeAStep()
-    if(i % 10 == 5):
-      run.params.iout = run.params.iout+1
-      print(run.params.iout)
+      #run.params.iout = run.params.iout+1
+      #print(run.params.iout)
       #IOUtil.outputParticles(run.getFilename(run.params.iout), run.integrator.x)
       
   print('Sim complete. Computing fluxes. Standby...')

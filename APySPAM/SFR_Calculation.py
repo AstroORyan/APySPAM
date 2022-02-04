@@ -12,8 +12,8 @@ import numpy as np
 class SFR_Calculations:
     def SFR(Gas,mass1,mass2,r1,r2,Sep,h,time,Weights,n1,n,init_ages):
         # First, initialise the array of the different population masses and SFRs.
-        Population_Mass = np.zeros([n,int(time/h)+1])
-        Age = np.zeros(int(time/h)+1)
+        Population_Mass = np.zeros([n,int(time/h)])
+        Age = np.zeros(int(time/h))
         SFRs = np.zeros(n)
         
         # Initialise Constants
