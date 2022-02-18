@@ -9,10 +9,29 @@ Quickly creates an image of the system using imshow and a meshgrid.
 """
 import matplotlib.pyplot as plt
 import numpy as np
-
+import uuid
 
 class Plotting_Function:
     def plotting(Coordinates,part_flux,SFRs,n_filters):
+        '''
+        Creates a white light image of the interacting galaxy system. With movie_flag activated, this will be run every 10 time steps to create a movie of interaction. With it false, this will just be called at the end.
+
+        Parameters
+        ------------
+        Coordinates:
+            N_particles x 6 array of particle coordinates and velocities. In simulation units.
+        part_flux:
+            N_particles x N_filters array of integrated flux for each particle.
+        SFRs:
+            N_particles x 1 array of SFRs at of each particle. Can be used to create a SFR map of the interacting galaxies.
+        n_filters:
+            Integer, number of filters input into simulation.
+
+        Returns
+        --------
+        None
+        '''
+
         # First, extract the wanted dimensions. 
         x = Coordinates[:,0]
         y = Coordinates[:,1]

@@ -225,6 +225,8 @@ def main():
 
   nstep_local = 7500;
 
+  movie_flag = False
+
   t0 = params.tstart;
   params.nstep = ((params.tend-t0)/params.h)+2;
   nstep_local = params.nstep;
@@ -236,6 +238,18 @@ def main():
       #run.params.iout = run.params.iout+1
       #print(run.params.iout)
       #IOUtil.outputParticles(run.getFilename(run.params.iout), run.integrator.x)
+    if i % 10 == 0 and movie_flag == True:  
+      Spectral_Density_1 = np.loadtxt(folder+'Spectra\\Raw_Spectral_Data_Z_'+str(params.metallicity[0])+'.txt')
+      Spectral_Density_2 = np.loadtxt(folder+'Spectra\\Raw_Spectral_Data_Z_'+str(params.metallicity[1])+'.txt')
+      
+      SFRs, SF_Mass = SFR_Calculations.SFR(Gas_Masses,params.mass1,params.mass2,params.rout1,params.rout2,params.Seperation,params.h,time_interval/2,
+                                           Weights,params.n1,params.n,params.Ages)
+      
+      Spectral_Density = SED.getSED(Spectral_Density_1,Spectral_Density_2,params.Ages,params.n1,params.n2,time_interval/2,Weights,[params.mass1,params.mass2],SF_Mass,params.h)
+    
+      Population_Flux = colour.get_colour(Spectral_Density[0],Spectral_Density[1],filters,params.redshift)
+      
+      Plotting_Function.plotting(run.x0,Population_Flux,SFRs,len(filters))
       
   print('Sim complete. Computing fluxes. Standby...')
   
@@ -245,7 +259,7 @@ def main():
   SFRs, SF_Mass = SFR_Calculations.SFR(Gas_Masses,params.mass1,params.mass2,params.rout1,params.rout2,params.Seperation,params.h,time_interval/2,
                               Weights,params.n1,params.n,params.Ages)
   
-  Spectral_Density = SED.getSED(folder,Spectral_Density_1,Spectral_Density_2,params.Ages,params.n1,params.n2,time_interval/2,Weights,[params.mass1,params.mass2],SF_Mass,params.h)
+  Spectral_Density = SED.getSED(Spectral_Density_1,Spectral_Density_2,params.Ages,params.n1,params.n2,time_interval/2,Weights,[params.mass1,params.mass2],SF_Mass,params.h)
 
   Population_Flux = colour.get_colour(Spectral_Density[0],Spectral_Density[1],filters,params.redshift)
   
