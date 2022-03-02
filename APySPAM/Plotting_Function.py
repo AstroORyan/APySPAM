@@ -44,8 +44,8 @@ class Plotting_Function:
         
         # Define Constants
         DU = 15
-        Resolution = 1.5/DU    # in kpc
-        
+        Resolution = 1.75/DU    # in kpc
+                
         # Define size of observed space
         Image = np.zeros([50,50])
         x_min = (-Image.shape[0]/2)*Resolution
@@ -68,10 +68,10 @@ class Plotting_Function:
 
                 Image[p,q] += total_flux[i]
             
-        plt.figure()
+        plt.figure(figsize=(12,8))
         plt.imshow(Image.T, origin='lower')
         plt.title('White Image')
         
-        plt.figure()
+        plt.figure(figsize=(12,8))
         plt.imshow(-2.5*np.log10(Image.T) - 48.6, origin='lower')
         plt.title('AB Magnitude Map')

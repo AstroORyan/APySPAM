@@ -8,6 +8,7 @@ Calculates the SFR at different points of the interaction, and calculates the fl
 
 """
 import numpy as np
+import matplotlib.pyplot as plt
 
 class SFR_Calculations:
     def SFR(Gas,mass1,mass2,r1,r2,Sep,h,time,Weights,n1,n,init_ages):
@@ -73,6 +74,8 @@ class SFR_Calculations:
         Mass_Ratio_1 = mass2/mass1
         Mass_Ratio_2 = mass1/mass2
         
+        sfh = np.zeros(Population_Mass.shape[1])
+        
         # Now, we can calculate the SFR at each particle through each timestep.
         for i in range(Population_Mass.shape[1]):
             Distance_Ratio_1 = r1/Sep[i]
@@ -81,15 +84,17 @@ class SFR_Calculations:
             Age_1 = init_ages[0] + counter*(h*TU/1e9)
             Age_2 = init_ages[1] + counter*(h*TU/1e9)
             
-            Starburst_Enhancement_prim = 0.25*(Mass_Ratio_1)*(Distance_Ratio_1**2)
-            Starburst_Enhancement_sec =  0.25*(Mass_Ratio_2)*(Distance_Ratio_2**2)
-           
+            Starburst_Enhancement_prim = (Mass_Ratio_1)*(Distance_Ratio_1**2)
+            Starburst_Enhancement_sec =  (Mass_Ratio_2)*(Distance_Ratio_2**2)
+                       
             # Note, this is only the enhanced part of the star formation. To find total at any time step, would need to uncomment lines below and add on the SFR_N_Base.
             SFRs_1 = Starburst_Enhancement_prim*((1/(e_1**2))*Age_1*np.exp(-(Age_1)/e_1))*((Baryonic_Fraction*mass1*1e11)/1e9)  # 1e9 here transforms SFR from M_0/Gyr to M_0/yr
             SFRs_2 = Starburst_Enhancement_sec*((1/(e_2**2))*Age_2*np.exp(-(Age_2)/e_2))*((Baryonic_Fraction*mass2*1e11)/1e9)
             
-            # SFR_1_Base = ((1/(e_1**2))*Age_1*np.exp(-(Age_1)/e_1))*((Baryonic_Fraction*mass1*1e11)/1e9)
-            # SFR_2_Base = ((1/(e_2**2))*Age_2*np.exp(-(Age_2)/e_2))*((Baryonic_Fraction*mass2*1e11)/1e9)
+            #SFR_1_Base = ((1/(e_1**2))*Age_1*np.exp(-(Age_1)/e_1))*((Baryonic_Fraction*mass1*1e11)/1e9)
+            #SFR_2_Base = ((1/(e_2**2))*Age_2*np.exp(-(Age_2)/e_2))*((Baryonic_Fraction*mass2*1e11)/1e9)
+            
+            sfh[i] = (1 + Starburst_Enhancement_prim)*((1/(e_2**2))*Age_2*np.exp(-(Age_2)/e_2))*((Baryonic_Fraction*mass2*1e11)/1e9)
                         
             if SFRs_1 > 0:
                 Population_Mass[:n1,i] += Weights[:n1]*SFRs_1*h*TU
@@ -102,6 +107,9 @@ class SFR_Calculations:
                 pass
             
             counter += 1
+            
+        plt.figure(figsize=(12,8))
+        plt.plot(h*TU/1e9*np.linspace(0,Population_Mass.shape[1],Population_Mass.shape[1]),sfh)
                                 
                 
         SFRs[:n1] = Weights[:n1]*SFRs_1

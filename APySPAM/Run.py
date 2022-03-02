@@ -30,8 +30,8 @@ class Run:
     #self.forceModel = SPMModel()
     #self.forceModel = MONDModel()
     #self.params.potential_type=2
-    self.forceModel = NBIModel()
     self.params.potential_type=1
+    self.forceModel = NBIModel()
     self.integrator = Integrator(self.forceModel)
     x0 = None
     xout = None
@@ -196,12 +196,12 @@ def main():
   --------
   None.
   
+  -------
   Returns
   -------
   None.
   
   Outputs
-  -------
   Two files:
       a.N_steps - a .txt file containing N_particles x (7 + N_filter) array. The first 6 columns
                       correspond to each particle coordinates and velocities. The following
@@ -232,16 +232,16 @@ def main():
   nstep_local = params.nstep;
   time_interval = (params.tend-t0)*2;
   #IOUtil.writeParameterFile(params,"tmp.p")
+  
+  Spectral_Density_1 = np.loadtxt(folder+'Spectra\\Raw_Spectral_Data_Z_'+str(params.metallicity[0])+'.txt')
+  Spectral_Density_2 = np.loadtxt(folder+'Spectra\\Raw_Spectral_Data_Z_'+str(params.metallicity[1])+'.txt')
 
   for i in tqdm(range(1,int(nstep_local+1))):
     run.takeAStep()
       #run.params.iout = run.params.iout+1
       #print(run.params.iout)
       #IOUtil.outputParticles(run.getFilename(run.params.iout), run.integrator.x)
-    if i % 10 == 0 and movie_flag == True:  
-      Spectral_Density_1 = np.loadtxt(folder+'Spectra\\Raw_Spectral_Data_Z_'+str(params.metallicity[0])+'.txt')
-      Spectral_Density_2 = np.loadtxt(folder+'Spectra\\Raw_Spectral_Data_Z_'+str(params.metallicity[1])+'.txt')
-      
+    if i % 10 == 0 and movie_flag == True:      
       SFRs, SF_Mass = SFR_Calculations.SFR(Gas_Masses,params.mass1,params.mass2,params.rout1,params.rout2,params.Seperation,params.h,time_interval/2,
                                            Weights,params.n1,params.n,params.Ages)
       
@@ -252,9 +252,6 @@ def main():
       Plotting_Function.plotting(run.x0,Population_Flux,SFRs,len(filters))
       
   print('Sim complete. Computing fluxes. Standby...')
-  
-  Spectral_Density_1 = np.loadtxt(folder+'Spectra\\Raw_Spectral_Data_Z_'+str(params.metallicity[0])+'.txt')
-  Spectral_Density_2 = np.loadtxt(folder+'Spectra\\Raw_Spectral_Data_Z_'+str(params.metallicity[1])+'.txt')
   
   SFRs, SF_Mass = SFR_Calculations.SFR(Gas_Masses,params.mass1,params.mass2,params.rout1,params.rout2,params.Seperation,params.h,time_interval/2,
                               Weights,params.n1,params.n,params.Ages)

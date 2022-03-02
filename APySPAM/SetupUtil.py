@@ -77,7 +77,7 @@ class SetupUtil:
     self.params.eps2 = self.params.epsilon2*self.params.epsilon2
     self.params.heat2 = 0.0
     self.params.opt2 = 1
-    Age_2 = 8
+    Age_2 = 9
     metal_2 = 0.004
 
     self.params.h = 0.05#Parameters.hbase
@@ -105,9 +105,9 @@ class SetupUtil:
     self.params.Ages = [Age_1, Age_2]
     self.params.metallicity = [metal_1,metal_2]
     
-    self.params.redshift = 0.039#0.0273
+    self.params.redshift = 0.0273
 
-    self.params.n = 2000
+    self.params.n = 2500
     self.params.n1 = int(self.params.n*(self.params.mass1/(self.params.mass1 + self.params.mass2)))    # Number of particles in the primary and secondary galaxy.
     self.params.n2 = int(self.params.n*(self.params.mass2/(self.params.mass1 + self.params.mass2)))    # Note, these have been distributed based on galaxy mass.
     while (self.params.n1 + self.params.n2) < self.params.n:                  # A safety loop to make sure all particles are assigned a galaxy.
