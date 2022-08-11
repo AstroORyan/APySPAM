@@ -186,7 +186,7 @@ class Run:
       self.takeAStep()
 
 
-def main():
+def pyspam_main():
   '''
   Main function of the algorithm. Initialises all required functions and runs merger
   simulation. In this function, you will need to specify the path to the folder containing
@@ -260,9 +260,11 @@ def main():
 
   Population_Flux = colour.get_colour(Spectral_Density[0],Spectral_Density[1],filters,params.redshift)
   
-  Plotting_Function.plotting(run.x0,Population_Flux,SFRs,len(filters))
+  white_image = Plotting_Function.plotting(run.x0,Population_Flux,SFRs,len(filters), movie_flag)
 
-  IOUtil.outputParticles(run.getFilename(run.params.iout),folder,run.integrator.x,Population_Flux,SFRs)
+  if not white_image:
+    IOUtil.outputParticles(run.getFilename(run.params.iout),folder,run.integrator.x,Population_Flux,SFRs)
+  else:
+    return white_image
 
-
-if __name__ == "__main__": main()
+# if __name__ == "__main__": main()

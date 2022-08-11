@@ -12,7 +12,7 @@ import numpy as np
 import uuid
 
 class Plotting_Function:
-    def plotting(Coordinates,part_flux,SFRs,n_filters):
+    def plotting(Coordinates,part_flux,SFRs,n_filters, flag):
         '''
         Creates a white light image of the interacting galaxy system. With movie_flag activated, this will be run every 10 time steps to create a movie of interaction. With it false, this will just be called at the end.
 
@@ -67,11 +67,14 @@ class Plotting_Function:
                 q = np.where(y[i] >= y_pixel_value)[0][-1]
 
                 Image[p,q] += total_flux[i]
+
+        if flag: 
+            plt.figure(figsize=(12,8))
+            plt.imshow(Image.T, origin='lower')
+            plt.title('White Image')
             
-        plt.figure(figsize=(12,8))
-        plt.imshow(Image.T, origin='lower')
-        plt.title('White Image')
-        
-        plt.figure(figsize=(12,8))
-        plt.imshow(-2.5*np.log10(Image.T) - 48.6, origin='lower')
-        plt.title('AB Magnitude Map')
+            plt.figure(figsize=(12,8))
+            plt.imshow(-2.5*np.log10(Image.T) - 48.6, origin='lower')
+            plt.title('AB Magnitude Map')
+        else:
+            return Image.T
