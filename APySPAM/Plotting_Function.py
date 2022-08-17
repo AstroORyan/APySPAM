@@ -69,9 +69,9 @@ class Plotting_Function:
                 Image[p,q] += total_flux[i]
             
         plt.figure(figsize=(12,8))
-        plt.imshow(Image.T, origin='lower')
+        plt.imshow(Image)
         plt.title('White Image')
         
         plt.figure(figsize=(12,8))
-        plt.imshow(-2.5*np.log10(Image.T) - 48.6, origin='lower')
+        plt.imshow(-2.5*np.log10(Image) - 48.6)
         plt.title('AB Magnitude Map')

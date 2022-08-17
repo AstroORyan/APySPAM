@@ -85,8 +85,8 @@ class SetupUtil:
     self.params.tstart = -10
     self.params.tIsSet = True
     
-    rx = -0.40793
-    ry = -1.92518
+    rx = 2.151963#-0.40793
+    ry = -0.478214#-1.92518
     rz = 1.95772
     vx = -1.14918
     vy = -1.02439
@@ -107,7 +107,7 @@ class SetupUtil:
     
     self.params.redshift = 0.0273
 
-    self.params.n = 2500
+    self.params.n = 1000
     self.params.n1 = int(self.params.n*(self.params.mass1/(self.params.mass1 + self.params.mass2)))    # Number of particles in the primary and secondary galaxy.
     self.params.n2 = int(self.params.n*(self.params.mass2/(self.params.mass1 + self.params.mass2)))    # Note, these have been distributed based on galaxy mass.
     while (self.params.n1 + self.params.n2) < self.params.n:                  # A safety loop to make sure all particles are assigned a galaxy.

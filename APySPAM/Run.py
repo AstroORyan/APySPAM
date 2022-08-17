@@ -86,6 +86,7 @@ class Run:
     self.xout = np.zeros((n+1,6))
 
     su.createCollision()
+    
 
     self.copyParticles(self.integrator.x,self.x0)
 
