@@ -266,4 +266,5 @@ def main():
   IOUtil.outputParticles(run.getFilename(run.params.iout),folder,run.integrator.x,Population_Flux,SFRs)
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__": 
+    main()

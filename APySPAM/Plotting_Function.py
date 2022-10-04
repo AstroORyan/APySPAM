@@ -66,12 +66,12 @@ class Plotting_Function:
                 p = np.where(x[i] >= x_pixel_value)[0][-1]
                 q = np.where(y[i] >= y_pixel_value)[0][-1]
 
-                Image[p,q] += total_flux[i]
+                Image[q,p] += total_flux[i]
             
         plt.figure(figsize=(12,8))
-        plt.imshow(Image)
+        plt.imshow(Image, origin='lower')
         plt.title('White Image')
         
         plt.figure(figsize=(12,8))
-        plt.imshow(-2.5*np.log10(Image) - 48.6)
+        plt.imshow(np.flip(-2.5*np.log10(Image) - 48.6, 1), origin='lower')
         plt.title('AB Magnitude Map')
