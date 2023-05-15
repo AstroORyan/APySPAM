@@ -42,25 +42,19 @@ class SetupUtil:
 
     return force
 
-
-
   def setHelpers(self, forceModel, integrator, params):
     self.forceModel = forceModel
     self.params = params
     self.integrator = integrator
 
-
-
   #Loads in parameters for the collision. 
   def customCollision(self):
 
-    self.params.tIsSet = True
-
-    self.params.phi1   = 97.78523
-    self.params.theta1 = 144.6012
+    self.params.phi1   =  224.10209245 #170.61828097  #360 * np.random.random() #60.46761714 #97.78523
+    self.params.theta1 = 356.75684385 #119.69917961 #360 * np.random.random() #167.37955099 #144.6012
     self.params.rscale1 = [1.0,1.0,1.0]
-    self.params.rout1   = 0.94075
-    self.params.mass1   = 1.3042
+    self.params.rout1   =  0.5289976 #0.89902137 #.26887505#10 * np.random.random() #1.26887505 #0.94075
+    self.params.mass1   = 8.99751888#14.1727547 #25 * np.random.random() #23.33004 #1.15176679#0.27 #1.3042
     self.params.epsilon1 = 0.3
     self.params.eps1 = self.params.epsilon1*self.params.epsilon1
     self.params.heat1 = 0.0
@@ -68,11 +62,11 @@ class SetupUtil:
     Age_1 = 10
     metal_1 = 0.0001
 
-    self.params.phi2   = 60.52239
-    self.params.theta2 = 216.5012
+    self.params.phi2   = 16.99607587 #132.75176858 #360 * np.random.random() #44.08483334 #60.52239
+    self.params.theta2 = 352.31522353 #210.99299639 #360 * np.random.random() #165.36261278 #216.5012
     self.params.rscale2 = [0.3,0.3,0.3]
-    self.params.rout2   = 0.54373
-    self.params.mass2   = 1.25831
+    self.params.rout2  = 0.74113061#1.89759031 #2.17440308#10 * np.random.random() #2.17440308 #0.54373
+    self.params.mass2   = 8.80339693#14.76404389 #25 * np.random.random()#24.69427#2.59670937 #1.25831
     self.params.epsilon2 = 0.3
     self.params.eps2 = self.params.epsilon2*self.params.epsilon2
     self.params.heat2 = 0.0
@@ -80,36 +74,40 @@ class SetupUtil:
     Age_2 = 9
     metal_2 = 0.004
 
-    self.params.h = 0.05#Parameters.hbase
-    self.params.time = -10
-    self.params.tstart = -10
+    self.params.h = 0.01#Parameters.hbase
+    self.params.time = -5
+    self.params.tstart = -5
+    self.params.tend = 0
     self.params.tIsSet = True
     
-    rx = -0.40793
-    ry = -1.92518
-    rz = 1.95772
-    vx = -1.14918
-    vy = -1.02439
-    vz = 0.77963
+    rx =  1.8582603#10.703579#10.703579257346457#-9.93853 #1.783929876 #2.25689#0.40793
+    ry =  1.6352691#9.811614#9.811614319234252#-4.5805 #1.635269053 #2.47768#-1.92518
+    rz =  -3.79189551#0.51760375 #-10 + 20 * np.random.random() #-3.47225427 #1.95772
+    vx =  -2.46174192#3.55495702 #-10 + 20 * np.random.random() #-1.56343971  #-1.14918
+    vy =   2.63538454#-1.77055358 #-10 + 20 * np.random.random() #4.3853814  #-1.02439
+    vz =   -2.24320895#1.05039907 #-10 + 20 * np.random.random() #0.55496875 #0.77963
+
+    # self.params.inclination_degree=20
+    # self.params.omega_degree=0
+    # self.params.rmin=0.9
+    # self.params.velocity_factor=1.2
     
     self.params.sec_vec = [rx,ry,rz,vx,vy,vz]
     self.params.use_sec_vec = True
-    
-    Gas_Fraction_1 = 0.15
-    Gas_Fraction_2 = 0.15
 
     baryonic_mass_1 = self.params.mass1 * (0.3333 + 1) / 7.13333
     baryonic_mass_2 = self.params.mass2 * (0.3333 + 1) / 7.13333
+
+    gas_fraction_1 = 0.15
+    gas_fraction_2 = 0.15
     
-    self.params.Gas_Mass = [Gas_Fraction_1*baryonic_mass_1, Gas_Fraction_2*baryonic_mass_2]
+    self.params.Gas_Mass = [gas_fraction_1*baryonic_mass_1, gas_fraction_2*baryonic_mass_2]
     self.params.Ages = [Age_1, Age_2]
     self.params.metallicity = [metal_1,metal_2]
     
-    self.params.redshift = 0.0273
-
-    self.params.n = 2500
-    self.params.n1 = int(self.params.n*(self.params.mass1/(self.params.mass1 + self.params.mass2)))    # Number of particles in the primary and secondary galaxy.
-    self.params.n2 = int(self.params.n*(self.params.mass2/(self.params.mass1 + self.params.mass2)))    # Note, these have been distributed based on galaxy mass.
+    self.params.n = 750
+    self.params.n1 = int(0.5*self.params.n)#int(self.params.n*(self.params.mass1/(self.params.mass1 + self.params.mass2)))    # Number of particles in the primary and secondary galaxy.
+    self.params.n2 = int(0.5*self.params.n)#int(self.params.n*(self.params.mass2/(self.params.mass1 + self.params.mass2)))    # Note, these have been distributed based on galaxy mass.
     while (self.params.n1 + self.params.n2) < self.params.n:                  # A safety loop to make sure all particles are assigned a galaxy.
         random = np.random.random()
         if random <= 0.5:
@@ -142,7 +140,7 @@ class SetupUtil:
       if ( tmpT < -12.0 ) :
         tmpT = -5
 
-      if ( math.fabs(tmpT) < self.params.h):
+      if ( math.fabs(tmpT) < self.params.h1):
         tmpT = -5
 
       self.params.tstart = tmpT
@@ -159,17 +157,21 @@ class SetupUtil:
                                         self.params.h, self.params.n, self.params.n1, self.params.time, self.integrator.x)
     else:
       print('Please set use_sec_vec flag to True in customCollision.')
-      sys.exit()
-      # mins = self.perturberPosition(self.params.inclination_degree, self.params.omega_degree, 
-      #                                self.params.rmin, self.params.velocity_factor, self.params.rout1,
-      #                                self.params.mass1, self.params.mass2, self.params.eps1, self.params.eps2,
-      #                                self.params.h, self.params.n, self.params.n1, self.params.time, 
-      #                                self.integrator.x, self.params.sec_vec)
+      #sys.exit()
+      mins = self.perturberPosition(self.params.inclination_degree, self.params.omega_degree, 
+                                     self.params.rmin, self.params.velocity_factor, self.params.rout1,
+                                     self.params.mass1, self.params.mass2, self.params.eps1, self.params.eps2,
+                                     self.params.h, self.params.n, self.params.n1, self.params.time, 
+                                     self.integrator.x, self.params.sec_vec)
 
     self.params.tmin = mins[0]
     self.params.rmin = mins[1]
     self.params.vrmin = mins[2]
     self.params.beta = mins[3]
+
+    if np.where(self.params.Seperation == np.min(self.params.Seperation))[0][0] < 0.5 or np.where(self.params.Seperation == np.min(self.params.Seperation))[0][0] > len(self.params.Seperation) - 0.5:
+      print('WARNING! No interaction has occurred.')
+
 
   # end createCollision
 
@@ -411,6 +413,7 @@ class SetupUtil:
 
     # now move position back to t0 from t=0.0
     while( t0 < tcurrent ):
+
       self.integrator.rk41(xx0, xxe, h)
       xx0[0] = xxe[0]
       xx0[1] = xxe[1] 

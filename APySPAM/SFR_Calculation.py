@@ -57,8 +57,8 @@ class SFR_Calculations:
             The total mass formed at each aprticle at each timestep. To then be used in colour function to combine with further SEDs.
         """
         # First, initialise the array of the different population masses and SFRs.
-        Population_Mass = np.zeros([n,int(time/h)])
-        Age = np.zeros(int(time/h))
+        Population_Mass = np.zeros([n,len(Sep)])
+        Age = np.zeros(len(Sep))
         SFRs = np.zeros(n)
 
         Sep = np.flip(Sep)
@@ -74,10 +74,10 @@ class SFR_Calculations:
         Mass_Ratio_1 = mass2/mass1
         Mass_Ratio_2 = mass1/mass2
         
-        sfh = np.zeros(Population_Mass.shape[1])
+        sfh = np.zeros(len(Sep))
         
         # Now, we can calculate the SFR at each particle through each timestep.
-        for i in range(Population_Mass.shape[1]):
+        for i in range(len(Sep)):
             Distance_Ratio_1 = r1/Sep[i]
             Distance_Ratio_2 = r2/Sep[i]
             
@@ -107,9 +107,6 @@ class SFR_Calculations:
                 pass
             
             counter += 1
-            
-        plt.figure(figsize=(12,8))
-        plt.plot(h*TU/1e9*np.linspace(0,Population_Mass.shape[1],Population_Mass.shape[1]),sfh)
                                 
                 
         SFRs[:n1] = Weights[:n1]*SFRs_1

@@ -5,6 +5,7 @@ Created on Wed Sep  1 14:06:44 2021
 @author: oryan
 """
 import numpy as np
+import sys
 
 class Gas_Dist:
     """
@@ -12,7 +13,7 @@ class Gas_Dist:
     also used to assign the particles weights which can be used to distribute global star formation for
     each particle.
     """
-    def MN_Dist(r1,r2,n1,n,Gas_Mass,x0,Sec_Initial_Coords):
+    def MN_Dist(r1,r2,n1,n,Gas_Mass,x0,Sec_Initial_Coords, approximate):
         '''
         Calculate the gas distribution using a Miyamoto-Nagai mass distribution. This distribution 
         is based on the Miyamoto-Nagai potential. Source: Miyamoto & Nagai, PASJ, 1975.
@@ -61,9 +62,12 @@ class Gas_Dist:
         b2 = 0.1
         
         # Now, can calculate the density distribution of the disk using a Miyamoto-Nagai distribution. These will be used as Weights on the particles:
-        Particle_Weights[:n1] = ((b1**2)*(a1*R[:n1]**2 + (a1 + 3*(b1**2)**0.5)*(a1 + (b1**2)**0.5)**2))/(4*np.pi*((R[:n1]**2 + (a1 + (b1**2)**0.5)**2)**(5/2))*(b1**2)**(3/2))
-        Particle_Weights[n1:] = ((b2**2)*(a2*R[n1:]**2 + (a2 + 3*(b2**2)**0.5)*(a2 + (b2**2)**0.5)**2))/(4*np.pi*((R[n1:]**2 + (a2 + (b2**2)**0.5)**2)**(5/2))*(b2**2)**(3/2))
-        
+        Particle_Weights[:n1] = 1#(1/(2*np.pi*a1**3))*((R[:n1]/a1)**-1)*((1 + (R[:n1]/a1))**-3)
+        Particle_Weights[n1:] = 1#(1/(2*np.pi*a2**3))*((R[n1:]/a2)**-1)*((1 + (R[n1:]/a2))**-3)
+
+        # Particle_Weights[:n1] = ((b1**2)*(a1*R[:n1]**2 + (a1 + 3*(b1**2)**0.5)*(a1 + (b1**2)**0.5)**2))/(4*np.pi*((R[:n1]**2 + (a1 + (b1**2)**0.5)**2)**(5/2))*(b1**2)**(3/2))
+        # Particle_Weights[n1:] = ((b2**2)*(a2*R[n1:]**2 + (a2 + 3*(b2**2)**0.5)*(a2 + (b2**2)**0.5)**2))/(4*np.pi*((R[n1:]**2 + (a2 + (b2**2)**0.5)**2)**(5/2))*(b2**2)**(3/2))
+
         # Normalise as they are weights
         Particle_Weights[:n1] /= np.sum(Particle_Weights[:n1])
         Particle_Weights[n1:] /= np.sum(Particle_Weights[n1:])        
@@ -71,5 +75,10 @@ class Gas_Dist:
         # Use to get Gas Mass Distribution
         Tracer_Mass[:n1] = Particle_Weights[:n1]*Gas_Mass[0]
         Tracer_Mass[n1:] = Particle_Weights[n1:]*Gas_Mass[1]
-        
+
+        if approximate:
+            factor = len(Tracer_Mass) / 2000
+            Particle_Weights = Particle_Weights * factor
+            Tracer_Mass = Tracer_Mass * factor
+
         return Particle_Weights, Tracer_Mass

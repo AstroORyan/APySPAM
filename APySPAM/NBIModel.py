@@ -501,8 +501,6 @@ class NBIModel(ForceModel):
       NBIModel.acceleration_particle[j] = acc
       NBIModel.acceleration[j] = acc
 
-
-
     # normalize to the unit mass
     for j in range(ntotal):
       NBIModel.mass_total[j]  = NBIModel.mass_total[j] / 7.13333
@@ -576,8 +574,8 @@ class NBIModel(ForceModel):
     v21 = 0;
 
     self.xn = x[n-1][:]
-    #for i in range(6):
-      #self.xn[i] = x[n-1][i]
+    # for i in range(6):
+    #   self.xn[i] = x[n-1][i]
 
     # make temps to handle perturber galaxy
     xp = self.xn[0]

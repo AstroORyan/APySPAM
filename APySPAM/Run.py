@@ -115,7 +115,7 @@ class Run:
                                    self.params.eps1, self.params.eps2,
                                    self.params.h, self.params.n, self.params.n1, self.params.time, self.integrator.x)
 
-    return mins;
+    return mins
   # end getMinValues
 
   #Copies the particles from x1 to x2.
@@ -144,9 +144,7 @@ class Run:
     '''
     self.integrator.rk4(self.x0,self.xout,self.params.h)
     self.copyParticles(self.xout,self.x0)
-    self.params.time = self.params.time + self.params.h;
-
-
+    self.params.time = self.params.time + self.params.h
 
   def getFilename(self,i):
     '''
@@ -209,28 +207,37 @@ def pyspam_main():
                       column being the star formation rates of each particle.
       results.npy - As above, but in an .npy format. For ease of use with further Python
                     algorithms.
-  '''
-    
+  '''    
   folder = 'C:\\Users\\oryan\\Documents\\PySPAM_Original_Python\\APySPAM\\'
-  filters = colour.get_filters(folder)
-      
+  filter_set = 'SLOAN'
+  filters = colour.get_filters(folder, filter_set)
+  approximate = False
+
+  if filter_set == 'SLOAN':
+    native_res = 0.396 #arcseconds
+  elif filter_set == 'HST':
+    native_res = 0.014 # arcseconds
+
+  redshift = 0.0225
+  block_reduce = 12
+  convs = {'u':0.0117213,'g':0.00440017,'r':0.00551778,'i':0.00644776,'z':0.0354372}
+
   run = Run()
   run.initRun()
-  params = run.params;
+  params = run.params
   
-  Gas_Masses, Weights = Gas_Dist.MN_Dist(params.rout1,params.rout2,params.n1,params.n,params.Gas_Mass,run.x0,params.Init_Coords)
+  Gas_Masses, Weights = Gas_Dist.MN_Dist(params.rout1,params.rout2,params.n1,params.n,[params.mass1, params.mass2],run.x0,params.Init_Coords, approximate)
 
   t0 = 0
   time_interval = 0
 
-  nstep_local = 7500;
-
-  movie_flag = False
+  movie_flag = True
 
   t0 = params.tstart;
-  params.nstep = ((params.tend-t0)/params.h)+2;
+  params.nstep = ((params.tend) - t0) / params.h
+
   nstep_local = params.nstep;
-  time_interval = (params.tend-t0)*2;
+  time_interval = (params.tend-t0)*2
   #IOUtil.writeParameterFile(params,"tmp.p")
   
   Spectral_Density_1 = np.loadtxt(folder+'Spectra\\Raw_Spectral_Data_Z_'+str(params.metallicity[0])+'.txt')
@@ -241,30 +248,23 @@ def pyspam_main():
       #run.params.iout = run.params.iout+1
       #print(run.params.iout)
       #IOUtil.outputParticles(run.getFilename(run.params.iout), run.integrator.x)
-    if i % 10 == 0 and movie_flag == True:      
-      SFRs, SF_Mass = SFR_Calculations.SFR(Gas_Masses,params.mass1,params.mass2,params.rout1,params.rout2,params.Seperation,params.h,time_interval/2,
-                                           Weights,params.n1,params.n,params.Ages)
-      
-      Spectral_Density = SED.getSED(Spectral_Density_1,Spectral_Density_2,params.Ages,params.n1,params.n2,time_interval/2,Weights,[params.mass1,params.mass2],SF_Mass,params.h)
-    
-      Population_Flux = colour.get_colour(Spectral_Density[0],Spectral_Density[1],filters,params.redshift)
-      
-      Plotting_Function.plotting(run.x0,Population_Flux,SFRs,len(filters))
+    if i % 50 == 0 and movie_flag == True:      
+      Plotting_Function.binary_plotting(run.x0, redshift, native_res, block_reduce, i)
       
   print('Sim complete. Computing fluxes. Standby...')
   
   SFRs, SF_Mass = SFR_Calculations.SFR(Gas_Masses,params.mass1,params.mass2,params.rout1,params.rout2,params.Seperation,params.h,time_interval/2,
                               Weights,params.n1,params.n,params.Ages)
-  
-  Spectral_Density = SED.getSED(Spectral_Density_1,Spectral_Density_2,params.Ages,params.n1,params.n2,time_interval/2,Weights,[params.mass1,params.mass2],SF_Mass,params.h)
 
-  Population_Flux = colour.get_colour(Spectral_Density[0],Spectral_Density[1],filters,params.redshift)
-  
-  white_image = Plotting_Function.plotting(run.x0,Population_Flux,SFRs,len(filters), movie_flag)
+  Spectral_Density = SED.getSED(Spectral_Density_1,Spectral_Density_2,params.Ages,params.n1,params.n2,time_interval/2,Weights,params.Gas_Mass,SF_Mass,params.h)
 
-  if not white_image:
-    IOUtil.outputParticles(run.getFilename(run.params.iout),folder,run.integrator.x,Population_Flux,SFRs)
-  else:
-    return white_image
+  Population_Flux = colour.get_colour(Spectral_Density[0],Spectral_Density[1],filters,redshift, run.x0[:params.n,2])
 
-# if __name__ == "__main__": main()
+  white_image = Plotting_Function.plotting(run.x0,Population_Flux,len(filters), redshift, native_res, block_reduce, True, convs)
+
+  np.save('C:/Users/oryan/Documents/PYSPAM_Original_Python/APySPAM/im-fold/white_image.npy', white_image)
+
+  # IOUtil.outputParticles(run.getFilename(run.params.iout),folder,run.integrator.x,Population_Flux,SFRs)
+
+
+if __name__ == "__main__": pyspam_main()

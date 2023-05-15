@@ -10,10 +10,12 @@ Algorithm to find the colour fluxes from each pixel in our image.
 import glob
 import numpy as np
 from scipy import interpolate
-import matplotlib.pyplot as plt
+import os
+from sys import exit
+
 
 class colour:
-    def get_filters(folder):
+    def get_filters(folder, filter_set):
         """
         Import the filters to "observe" the interacting galaxies with. Expects files of a .txt or .dat 
         format. Expects files in the same layout as those on the SVO Service 
@@ -25,15 +27,26 @@ class colour:
         folder:
             Specified path to folder containing filters.
         """
-        filter_folder = folder+'\\Filters\\'
+
+        if filter_set == 'SLOAN':
+            filter_folder = folder+'/Filters/SLOAN/'
+        elif filter_set == 'HST':
+            filter_folder = folder+'/Filters/HST/'
+        else:
+            print('Filter selection invalid.')
+            exit()
+
         filters = glob.glob(filter_folder+'*.*')
         
-        filter_data = []
-        
-        for i in range(len(filters)):
-            temp = np.loadtxt(filters[i])
-            filter_data.append(temp)
+        filter_data = {}
+        for i in filters:
+            tmp = np.loadtxt(i)
             
+            filt = os.path.basename(i).split('.')[1]
+            
+            filter_data[filt] = tmp
+            del tmp
+
         return filter_data
     
     def get_dist(z):
@@ -68,8 +81,8 @@ class colour:
         D_A = Dnow*J_x/(1+z)
         D_L = ((1+z)**2)*D_A   #This gives the distance in kiloparsecs.
         
-        parsec_cm = 3.086e21                  #This is kiloparsecs in centimeters.
-        d_cm = D_L*parsec_cm
+        kpc_cm = 3.086e21                  #This is kiloparsecs in centimeters.
+        d_cm = D_L*kpc_cm
         
         
         return d_cm
@@ -106,7 +119,7 @@ class colour:
       
         return flux_ext
     
-    def get_colour(SED,Wavelength,filters,z):
+    def get_colour(SED,Wavelength,filters,redshift,z_pos):
         """
         From the found Spectral Energy Distributions of the each particle, find the colour flux observed
         from each particle by applying the filter transmissions.
@@ -129,20 +142,26 @@ class colour:
             The colour flux distribution observed at each particle in each filter.
         """
         c = 2.988e8
-        conv_units = 3.826e33   # To convert units from default GALEX units to ergs/s. Found from GALEX documentation. 
+        conv_units = 3.826e33   # To convert units from default GALEX units to ergs/s. Found from GALEX documentation http://www.bruzual.org/bc03/doc/bc03.pdf. 
         
-        d_cm = colour.get_dist(z)
+        d_cm = colour.get_dist(redshift)
+
+        kpc_cm = 3.086e21
+        d_sim = (z_pos * 15) * kpc_cm
+
+        d_part = d_cm + d_sim
+        d_part = d_part[:, np.newaxis]
         
-        part_colours = []
+        part_colours = {}
         
-        for i in range(len(filters)):
+        for i in list(filters.keys()):
             tmp = filters[i]
             filter_wav = tmp[:,0]
             filter_tran = tmp[:,1]
             del tmp
             
             # Apply redshift to observed wavelengths.            
-            wav_obs = Wavelength*(1+z)
+            wav_obs = Wavelength*(1+redshift)
             
             # Now, must pull out the flux distribution from wavelength_obs which matches filter:
             start_index = np.where(wav_obs >= filter_wav[0])[0][0]
@@ -155,7 +174,7 @@ class colour:
             flux_dist = colour.get_ext(wav_obs_fil,flux_dist)
             
             # Quickly get emitted frequency:
-            freq_obs = 2.988e8/(1e-10*wav_obs_fil)
+            freq_obs = c/((1e-10)*(wav_obs_fil))
             freq_obs = np.flip(freq_obs)
             
             # Create an interpolation object so that it will match the data.
@@ -166,18 +185,19 @@ class colour:
             
             # Now, need to use this to get the population colours.
             colour_dist_per_A = flux_dist*tran_new[np.newaxis,:]
+            wav_obs_fil = wav_obs_fil
             
             # Now, need to conduct a lot of conversions to get this into useful units. 
-            colour_dist_L = colour_dist_per_A*wav_obs_fil*((wav_obs_fil*1e-10)/c)
+            colour_dist_L = colour_dist_per_A*wav_obs_fil*((wav_obs_fil*(1e-10))/c)
             
             # Now, need to convert this into frequency units as well as account for the distance to the object.
-            colour_dist_flux = (conv_units*colour_dist_L)/(4*np.pi*d_cm**2)
+            colour_dist_flux = (conv_units*colour_dist_L)/(4*np.pi*d_part**2)
     
             # Now, we can integrate:
             int_colour = np.trapz((1/freq_obs)*colour_dist_flux, freq_obs)
             int_colour = int_colour/np.trapz(tran_new/freq_obs, freq_obs)   # Second division is as described in the GALEX docs.
-            
+
             # Add result to list:
-            part_colours.append(int_colour)
+            part_colours[i] = int_colour     # Having gone through this with Astropy units, this comes out in units of erg / s / cm^2 / Hz
             
         return part_colours

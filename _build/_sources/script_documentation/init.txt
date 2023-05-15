@@ -1,0 +1,126 @@
+Full Module Descriptions
+---------------------------
+
+This section will be a full breakdown of every module in PySPAM, as well as going into detail about
+each module in the original JSPAM which has been ported over. If you are looking to just get this
+algorithm and get some simulations running, I'd recommend looking at the example sections! This
+section will go into far more detail than you need.
+
+If youre having problems in specific modules or setups, it might be best to check the FAQ section
+first. If issues are still being encountered, this section is the place to be! If this section 
+doesn't solve your problem, please don't hesitate to email me with questions/bug fixes at
+d.oryan@lancaster.ac.uk.
+
+This section will consist of a brief description of each file in the module, followed by detailed
+descriptions of each function. For the docstrings, see the actual code! 
+
+So, with that out of the way, let's get started...
+
+colour
+========
+``colour.py`` is the most computationally intense module in the overall algorithm. It is where the 
+colour fluxes of each particle are calculated. This must be done by calculating the ages and stellar
+masses of each particles population throughout the entire simulation. The functions to do this are 
+contained in here. 
+
+Constants
+==========
+``Constants.py`` is a utility module which was in the original JSPAM. While not used explicitly in 
+APySPAM, it is very useful to be able to quickly see how to convert from simulation units to physical
+units. For reference, a table of the conversions is shown below:
+
+**INSERT_TABLE**
+
+
+ForceModel
+============
+This function is what calculates the forces on each particle, based upon the underlying physical model 
+the user has inputted (i.e, NB, MOND or SPM). This utilises a Runge-Kutta update algorithm to calculate
+all new positions and velocities of the particles at each time step using the given model.
+
+
+
+Gas_Dist
+=========
+``Gas_Dist`` is an initialization function. It utilises a user specified gas distribution model over the
+disk of the galaxy to give a gas fraction to each particle. This gas fraction will later be used to 
+weight the total star formation that can occur in each particle throughout the simulation. 
+
+Integrator
+============
+Module from the original JSPAM algorithm. This conducts the actual integration of updating the particles
+position and velocities from the ForceModel script.
+
+IOUtil
+========
+This is another utility function. Standing for Input-Output Utility, it conducts imports of the colour
+filters the user wants to simulate viewing the interacting systems through. It also conducts the two
+saving functions to a ``.txt`` and ``.npy`` file. Go here if you want to edit paths manually rather 
+than specifying in the CLI input.
+
+MathUtil
+==========
+A final utility function which contains many used astrophysical equations for speedup. Using 
+functionality like this decreases computation time, so is very useful.
+
+MONDModel
+===========
+This function calculates the total forces on each particle in the simulation from either unit galaxy.
+This assumes a Modified Newtonian Dynamic (MOND) cosmology. All forces calculated in this script are
+output to ``Integrator``.
+
+
+NBIModel
+===========
+If selected by the user, this function will calculate the total force and direction on each particle
+using a Lambda Cold Dark Matter cosmology in a purely N-body model. All forces calculated in this script
+are output to ``Integrator``.
+
+Parameters
+===========
+A file containing a list of all the parameters that a user can adjust. This file is easier to use as the
+input than attempting to type in all the parameters in the CLI. If the user wishes, however, the 
+parameters can be updated directly in the Setup Utility function. This file serves as a good reference
+for what can be adjusted.
+
+Plotting_Function
+===================
+This file contains all functions required for mapping out the physical light distributions of the 
+resulting galactic morphologies. If the user wishes, they can activate this mapping for each filter
+individually, a lupton_rgb map (a close approximation to an actual observation in the filters), a gas
+distribution map and a star formation map. By default, this function only creates and saves a white light
+image. 
+
+Also note, a flag can be used to execute this function over numerous timestep intervals, giving the user
+the ability to make a film of the interaction occurring. This, however, massively increases the 
+computational expense of the module. 
+
+Run 
+====
+The main module of the algorithm, and the one I'm going to spend the most time talking about. This
+function is where we run the entire simulation from, and has many functions linking to all of the other
+modules described here. 
+
+SEDs
+=======
+This file contains all functions necessary for creating, updating and overwriting the Spectral Energy
+Distributions of each particle. Note, this file mainly deals with setup and manipulation of these
+results. All calculations are done in other files.
+
+SetupUtil
+============
+This is the Setup Utility file, containing all the functions required for setting up the interaction.
+In this file, the user can alter the initial parameters of the interaction, as well as change some
+flags as to how the interaction will be forced.
+
+SFR_Calculation
+================
+This is a rapid function which is called in every timestep. It calculates the star formation rate at
+each timestep and then converts this into a total mass formed at each particle in each timestep. This
+is then returned as the total mass of a new stellar population at each timestep.
+
+SPMModel
+===========
+This function calculates the force on each particle from both unit galaxy's assuming a Softened Point 
+Mass potential. This is slightly more computationally intense than the other two users, but can lead to 
+more accurate final representations of morphology.
