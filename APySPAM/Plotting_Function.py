@@ -13,15 +13,75 @@ import sys
 
 from astropy.cosmology import FlatLambdaCDM
 from astropy.nddata import block_reduce
-from astropy.convolution import convolve_fft
+from astropy.convolution import Gaussian2DKernel, convolve, interpolate_replace_nans
 import astropy.units as u
 
-def apply_psf(im):
+# def interpolating(im):
+#     mask = np.load(r'C:\Users\oryan\Documents\PySPAM_Original_Python_MCMC_Counts\masks\Arp240-mask-50.npy')
+#     pix = np.argwhere(im == 0)
+#     for i in pix:
+#         x = i[0]
+#         y = i[1]
+#         if mask[x,y] and np.sum(im[x-1:x+1, y-1:y+1] == 0) < 2:
+#             im[x,y] = np.sum(im[x-1:x+1, y-1:y+1]) / (im[x-1:x+1, y-1:y+1].shape[1] * im[x-1:x+1, y-1:y+1].shape[0])
 
-    psf = np.load('C:/Users/oryan/Documents/PySPAM_Original_Python/APySPAM/psfs/full-psf.npy')
+#     return im
 
-    convolved_image = convolve_fft(im, psf, boundary = 'fill')
-    return convolved_image
+# def apply_psf(im):
+
+#     psf = np.load('C:/Users/oryan/Documents/PySPAM_Original_Python/APySPAM/psfs/full-psf.npy')
+
+#     convolved_image = convolve_fft(im, psf, boundary = 'fill')
+#     return convolved_image
+
+def assign_pixel(flux, x_pix, y_pix, im, part_coord, x_pix_coord, y_pix_coord, lim):
+    
+    sep = []
+    pix_coord = [[x_pix_coord[x_pix]], [y_pix_coord[y_pix]]]
+    sep.append(np.sqrt((pix_coord[0] - part_coord[0])**2 + (pix_coord[1] - part_coord[1])**2))
+    # im[x_pix, y_pix] += sep*flux
+    
+    pix_coord = [[x_pix_coord[x_pix-1]], [y_pix_coord[y_pix]]]
+    sep.append(np.sqrt((pix_coord[0] - part_coord[0])**2 + (pix_coord[1] - part_coord[1])**2))
+    # im[x_pix-1, y_pix] += sep*flux
+    
+    pix_coord = [[x_pix_coord[x_pix]], [y_pix_coord[y_pix-1]]]
+    sep.append(np.sqrt((pix_coord[0] - part_coord[0])**2 + (pix_coord[1] - part_coord[1])**2))
+    # im[x_pix, y_pix-1] += sep*flux
+    
+    pix_coord = [[x_pix_coord[x_pix-1]], [y_pix_coord[y_pix-1]]]
+    sep.append(np.sqrt((pix_coord[0] - part_coord[0])**2 + (pix_coord[1] - part_coord[1])**2))
+    # im[x_pix-1, y_pix-1] += sep*flux
+    
+    if not x_pix + 1 > lim[0]:
+        pix_coord = [[x_pix_coord[x_pix+1]], [y_pix_coord[y_pix]]]
+        sep.append(np.sqrt((pix_coord[0] - part_coord[0])**2 + (pix_coord[1] - part_coord[1])**2))
+        # im[x_pix+1, y_pix] += sep*flux
+    
+    if not y_pix + 1 > lim[0]:
+        pix_coord = [[x_pix_coord[x_pix]], [y_pix_coord[y_pix+1]]]
+        sep.append(np.sqrt((pix_coord[0] - part_coord[0])**2 + (pix_coord[1] - part_coord[1])**2))
+        # im[x_pix, y_pix+1] += sep*flux
+    
+    if not x_pix + 1 > lim[0] and not y_pix + 1 > lim[1]:
+        pix_coord = [[x_pix_coord[x_pix+1]], [y_pix_coord[y_pix+1]]]
+        sep.append(np.sqrt((pix_coord[0] - part_coord[0])**2 + (pix_coord[1] - part_coord[1])**2))
+        # im[x_pix+1, y_pix+1] += sep*flux
+    
+    sep = sep / np.sum(sep)
+    
+    im[x_pix, y_pix] += sep[0]*flux
+    im[x_pix-1, y_pix] += sep[1]*flux
+    im[x_pix, y_pix-1] += sep[2]*flux
+    im[x_pix-1, y_pix-1] += sep[3]*flux
+    if not x_pix + 1 > lim[0]:
+        im[x_pix+1, y_pix] += sep[4]*flux
+    if not y_pix + 1 > lim[0]:
+        im[x_pix, y_pix+1] += sep[5]*flux
+    if not x_pix + 1 > lim[0] and not y_pix + 1 > lim[1]:
+        im[x_pix+1, y_pix+1] += sep[6]*flux
+    
+    return im  
 
 def counts_convert(column_si, ct_nmgy):
     jansky_nmgy = (3.631e-6 * u.Jy / u.nanomaggy)
@@ -139,11 +199,12 @@ class Plotting_Function:
                 p = np.where(x[i] >= x_pixel_value)[0][-1]
                 q = np.where(y[i] >= y_pixel_value)[0][-1]
 
-                Image[p,q] += total_counts[i]
+                Image = assign_pixel(total_counts[i], p, q, Image, [x[i],y[i]], x_pixel_value, y_pixel_value, Image.shape)
 
         # Image_psf = apply_psf(Image)
 
         red_image = block_reduce(Image, reduction, func = np.sum)
+        # im_exp = interpolating(red_image)
 
         if flag: 
            # plt.figure(figsize=(12,8))

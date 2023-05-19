@@ -131,3 +131,13 @@ dmypy.json
 # Data
 *.dat
 a.*
+
+# Images
+*.jpeg
+*.png
+*.gif
+
+# Large Data
+*.fit
+*.fits
+*.npy

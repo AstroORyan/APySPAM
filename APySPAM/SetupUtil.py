@@ -50,11 +50,11 @@ class SetupUtil:
   #Loads in parameters for the collision. 
   def customCollision(self):
 
-    self.params.phi1   =  224.10209245 #170.61828097  #360 * np.random.random() #60.46761714 #97.78523
-    self.params.theta1 = 356.75684385 #119.69917961 #360 * np.random.random() #167.37955099 #144.6012
+    self.params.phi1   =  90.61828097  #360 * np.random.random() #60.46761714 #97.78523
+    self.params.theta1 = 173.69917961 #360 * np.random.random() #167.37955099 #144.6012
     self.params.rscale1 = [1.0,1.0,1.0]
-    self.params.rout1   =  0.5289976 #0.89902137 #.26887505#10 * np.random.random() #1.26887505 #0.94075
-    self.params.mass1   = 8.99751888#14.1727547 #25 * np.random.random() #23.33004 #1.15176679#0.27 #1.3042
+    self.params.rout1   =  0.73 #0.89902137 #.26887505#10 * np.random.random() #1.26887505 #0.94075
+    self.params.mass1   = 8.1 #14.1727547 #25 * np.random.random() #23.33004 #1.15176679#0.27 #1.3042
     self.params.epsilon1 = 0.3
     self.params.eps1 = self.params.epsilon1*self.params.epsilon1
     self.params.heat1 = 0.0
@@ -62,11 +62,11 @@ class SetupUtil:
     Age_1 = 10
     metal_1 = 0.0001
 
-    self.params.phi2   = 16.99607587 #132.75176858 #360 * np.random.random() #44.08483334 #60.52239
-    self.params.theta2 = 352.31522353 #210.99299639 #360 * np.random.random() #165.36261278 #216.5012
+    self.params.phi2   = 180.75176858 #360 * np.random.random() #44.08483334 #60.52239
+    self.params.theta2 = 120.04 #360 * np.random.random() #165.36261278 #216.5012
     self.params.rscale2 = [0.3,0.3,0.3]
-    self.params.rout2  = 0.74113061#1.89759031 #2.17440308#10 * np.random.random() #2.17440308 #0.54373
-    self.params.mass2   = 8.80339693#14.76404389 #25 * np.random.random()#24.69427#2.59670937 #1.25831
+    self.params.rout2  =  0.5 #1.89759031 #2.17440308#10 * np.random.random() #2.17440308 #0.54373
+    self.params.mass2   = 7.22#14.76404389 #25 * np.random.random()#24.69427#2.59670937 #1.25831
     self.params.epsilon2 = 0.3
     self.params.eps2 = self.params.epsilon2*self.params.epsilon2
     self.params.heat2 = 0.0
@@ -80,12 +80,12 @@ class SetupUtil:
     self.params.tend = 0
     self.params.tIsSet = True
     
-    rx =  1.8582603#10.703579#10.703579257346457#-9.93853 #1.783929876 #2.25689#0.40793
-    ry =  1.6352691#9.811614#9.811614319234252#-4.5805 #1.635269053 #2.47768#-1.92518
-    rz =  -3.79189551#0.51760375 #-10 + 20 * np.random.random() #-3.47225427 #1.95772
-    vx =  -2.46174192#3.55495702 #-10 + 20 * np.random.random() #-1.56343971  #-1.14918
-    vy =   2.63538454#-1.77055358 #-10 + 20 * np.random.random() #4.3853814  #-1.02439
-    vz =   -2.24320895#1.05039907 #-10 + 20 * np.random.random() #0.55496875 #0.77963
+    rx =  1.8582603 #10.703579#10.703579257346457#-9.93853 #1.783929876 #2.25689#0.40793
+    ry =  1.635269053 #9.811614#9.811614319234252#-4.5805 #1.635269053 #2.47768#-1.92518
+    rz =  -0.07#-3.79189551#0.51760375 #-10 + 20 * np.random.random() #-3.47225427 #1.95772
+    vx =  2.86174192#3.55495702 #-10 + 20 * np.random.random() #-1.56343971  #-1.14918
+    vy =  2.58055358 #-10 + 20 * np.random.random() #4.3853814  #-1.02439
+    vz =  -1.215039907 #-10 + 20 * np.random.random() #0.55496875 #0.77963
 
     # self.params.inclination_degree=20
     # self.params.omega_degree=0
@@ -105,7 +105,7 @@ class SetupUtil:
     self.params.Ages = [Age_1, Age_2]
     self.params.metallicity = [metal_1,metal_2]
     
-    self.params.n = 750
+    self.params.n = 1000
     self.params.n1 = int(0.5*self.params.n)#int(self.params.n*(self.params.mass1/(self.params.mass1 + self.params.mass2)))    # Number of particles in the primary and secondary galaxy.
     self.params.n2 = int(0.5*self.params.n)#int(self.params.n*(self.params.mass2/(self.params.mass1 + self.params.mass2)))    # Note, these have been distributed based on galaxy mass.
     while (self.params.n1 + self.params.n2) < self.params.n:                  # A safety loop to make sure all particles are assigned a galaxy.

@@ -5,7 +5,7 @@ Created on Tue Aug 31 17:07:42 2021
 @author: oryan
 """
 
-from numpy import zeros,save
+from numpy import zeros,save, asarray
 
 class IOUtil:
 
@@ -61,8 +61,9 @@ class IOUtil:
       positions, velocities, integrated fluxes in each user provided filter and star formation rate.
     '''
     size = len(x0) - 1
-    
-    
+
+    fluxes = asarray(list(fluxes.values()))
+        
     output = zeros([size,x0.shape[1] + len(fluxes) + 1])
     output[:,:x0.shape[1]] = x0[:size,:].copy()
     
